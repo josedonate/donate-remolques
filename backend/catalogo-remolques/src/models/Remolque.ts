@@ -1,4 +1,4 @@
-export type MMA = '<750kg' | '750-3500kg';
+export type MMA = '<=750kg' | '(750kg-3500kg]';
 export type TipoSobrelateral = 'ninguno' | 'chapa' | 'rejilla';
 
 export interface Dimensiones {
@@ -19,7 +19,7 @@ export interface Rueda {
 
 export class Remolque {
   constructor(
-    public id: string,
+    public id: number,
     public familia: string,
     public nombre: string,
     public dimensiones: Dimensiones,

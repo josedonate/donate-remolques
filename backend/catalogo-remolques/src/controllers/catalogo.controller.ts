@@ -1,43 +1,54 @@
-﻿import { Request, Response } from 'express';
-import { Remolque } from '../models/Remolque';
+﻿import { Request, Response, NextFunction } from 'express';
+import CatalogoService from '../services/catalogo.service';
+import { remolqueInputSchema } from '../validators/remolque.validator';
 
-const remolquesCatalogo: Remolque[] = [
-  new Remolque(
-    "1",
-    "Plataforma",
-    "Remolque Básico",
-    { ancho: 1.2, largo: 2.5 },
-    "<750kg",
-    { numeroEjes: 1, kgPorEje: 750 },
-    false,
-    false,
-    true,
-    { pulgadasLlanta: 13, numeracionNeumatico: "165/70R13" },
-    "ninguno",
-    false,
-    false,
-    false,
-    "/modelos/remolque1.glb"
-  ),
-  new Remolque(
-    "2",
-    "Ganadero",
-    "Remolque Cerrado",
-    { ancho: 1.4, largo: 3.0, alto: 1.2 },
-    "750-3500kg",
-    { numeroEjes: 2, kgPorEje: 1000 },
-    true,
-    true,
-    true,
-    { pulgadasLlanta: 14, numeracionNeumatico: "175/70R14" },
-    "rejilla",
-    true,
-    true,
-    true,
-    "/modelos/remolque2.glb"
-  )
-];
+export const obtenerRemolquesCatalogo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const remolques = await CatalogoService.obtenerRemolques();
+    res.status(200).json(remolques);
+  } catch (error) {
+    next(error);
+  }
+};
 
-export const obtenerRemolquesCatalogo = (req: Request, res: Response) => {
-  res.status(200).json(remolquesCatalogo);
+export const obtenerRemolquePorId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const id = parseInt(req.params.id);
+    const remolque = await CatalogoService.obtenerRemolquePorId(id);
+    if (!remolque) {
+      res.status(404).json({ error: 'Remolque no encontrado' });
+      return;
+    }
+    res.status(200).json(remolque);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const crearRemolque = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const parsed = remolqueInputSchema.safeParse(req.body);
+
+  if (!parsed.success) {
+    res.status(400).json({ error: parsed.error.format() });
+    return;
+  }
+
+  try {
+    const nuevo = await CatalogoService.crearRemolque(parsed.data);
+    res.status(201).json(nuevo);
+  } catch (error) {
+    next(error);
+  }
 };

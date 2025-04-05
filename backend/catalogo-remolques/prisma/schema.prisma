@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Remolque {
+  id                 Int     @id @default(autoincrement())
+  familia            String
+  nombre             String
+  ancho              Float
+  largo              Float
+  alto               Float?
+  mma                String
+  numeroEjes         Int
+  kgPorEje           Int
+  freno              Boolean
+  basculante         Boolean
+  ruedaJockey        Boolean
+  pulgadasLlanta     Int
+  numeracionNeumatico String
+  sobrelaterales     String
+  toldo              Boolean
+  tapadera           Boolean
+  apoyaTableros      Boolean
+  urlModelo3D        String
+}
+

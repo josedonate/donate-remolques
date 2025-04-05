@@ -1,9 +1,10 @@
 ﻿import { Router } from 'express';
-import { obtenerRemolquesCatalogo } from '../controllers/catalogo.controller';
+import { obtenerRemolquesCatalogo, obtenerRemolquePorId, crearRemolque } from '../controllers/catalogo.controller';
 
 const router = Router();
 
-// GET /api/remolques → Devuelve todos los remolques del catálogo
 router.get('/remolques', obtenerRemolquesCatalogo);
+router.get('/remolques/:id', obtenerRemolquePorId);
+router.post('/remolques', crearRemolque);
 
 export default router;
