@@ -2,10 +2,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  AfterLoad,
 } from "typeorm";
 
-export type MMA = "<=750kg" | "(750kg-3500kg]";
-export type TipoSobrelateral = "chapa" | "rejilla"; // ✅ sin "ninguno"
+export type LocalizacionRuedas = "porFuera" | "porDebajo";
+export type TipoSobrelateral = "chapa" | "rejilla";
 
 export interface Dimensiones {
   ancho: number;
@@ -21,6 +22,7 @@ export interface Ejes {
 export interface Rueda {
   pulgadasLlanta: number;
   numeracionNeumatico: string;
+  localizacionRuedas: LocalizacionRuedas;
 }
 
 @Entity({ name: "remolques" })
@@ -37,11 +39,20 @@ export class Remolque {
   @Column({ type: "jsonb" })
   dimensiones!: Dimensiones;
 
-  @Column({ type: "enum", enum: ["<=750kg", "(750kg-3500kg]"] })
-  mma!: MMA;
+  @Column()
+  tara!: number;
+
+  @Column()
+  mma!: number;
+
+  // Propiedad calculada tras cargar de BBDD
+  categoria!: "O1" | "O2";
 
   @Column({ type: "jsonb" })
   ejes!: Ejes;
+
+  @Column({ type: "jsonb" })
+  rueda!: Rueda;
 
   @Column()
   freno!: boolean;
@@ -52,10 +63,7 @@ export class Remolque {
   @Column()
   ruedaJockey!: boolean;
 
-  @Column({ type: "jsonb" })
-  rueda!: Rueda;
-
-  // 🟡 Opcionales
+  // Opcionales
   @Column({ type: "enum", enum: ["chapa", "rejilla"], nullable: true })
   sobrelaterales?: TipoSobrelateral;
 
@@ -73,4 +81,9 @@ export class Remolque {
 
   @Column()
   urlModelo3D!: string;
+
+  @AfterLoad()
+  setCategoria() {
+    this.categoria = this.mma <= 750 ? "O1" : "O2";
+  }
 }
