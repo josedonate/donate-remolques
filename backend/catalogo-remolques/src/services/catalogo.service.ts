@@ -1,22 +1,23 @@
-import { RemolqueInput } from '../validators/remolque.validator';
-import { fromZodToRemolque } from '../mappers/fromZodToRemolque';
-import { fromRemolqueToPrisma } from '../mappers/fromRemolqueToPrisma';
-import CatalogoRepository from '../repositories/catalogo.repository';
+import { AppDataSource } from "../data-source";
+import { Remolque } from "../models/Remolque";
 
-class CatalogoService {
-  async obtenerRemolques() {
-    return await CatalogoRepository.obtenerRemolques();
-  }
+const repo = AppDataSource.getRepository(Remolque); // Repositorio de Remolque
 
-  async obtenerRemolquePorId(id: number) {
-    return await CatalogoRepository.obtenerRemolquePorId(id);
-  }
+export const obtenerRemolques = async (): Promise<Remolque[]> => {
+  return await repo.find();
+};
 
-  async crearRemolque(data: RemolqueInput) {
-    const remolque = fromZodToRemolque(data);
-    const remolquePlano = fromRemolqueToPrisma(remolque);
-    return await CatalogoRepository.crearRemolque(remolquePlano);
-  }
-}
+export const crearRemolque = async (data: Partial<Remolque>): Promise<Remolque> => {
+  const nuevo = repo.create(data);
+  return await repo.save(nuevo);
+};
 
-export default new CatalogoService();
+export const obtenerRemolquePorId = async (id: number): Promise<Remolque | null> => {
+  return await repo.findOneBy({ id });
+};
+
+export const eliminarRemolquePorId = async (id: number): Promise<boolean> => {
+  const resultado = await repo.delete(id);
+  return resultado.affected !== 0;
+};
+

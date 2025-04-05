@@ -1,36 +1,38 @@
 import { z } from 'zod';
+import { Dimensiones, Ejes, Rueda, MMA, TipoSobrelateral } from '../models/Remolque';
 
-export const dimensionesSchema = z.object({
-  ancho: z.number(),
-  largo: z.number(),
-  alto: z.number().optional().nullable(),
-});
-
-export const ejesSchema = z.object({
-  numeroEjes: z.number().int(),
-  kgPorEje: z.number().int(),
-});
-
-export const ruedaSchema = z.object({
-  pulgadasLlanta: z.number().int(),
-  numeracionNeumatico: z.string(),
-});
-
-export const remolqueInputSchema = z.object({
+export const remolqueSchema = z.object({
   familia: z.string(),
   nombre: z.string(),
-  dimensiones: dimensionesSchema,
+
+  dimensiones: z.object({
+    ancho: z.number(),
+    largo: z.number(),
+    alto: z.number().optional(),
+  }).strict(),
+
   mma: z.enum(['<=750kg', '(750kg-3500kg]']),
-  ejes: ejesSchema,
+
+  ejes: z.object({
+    numeroEjes: z.number(),
+    kgPorEje: z.number(),
+  }).strict(),
+
   freno: z.boolean(),
   basculante: z.boolean(),
   ruedaJockey: z.boolean(),
-  rueda: ruedaSchema,
-  sobrelaterales: z.string().optional().nullable(),
+
+  rueda: z.object({
+    pulgadasLlanta: z.number(),
+    numeracionNeumatico: z.string(),
+  }).strict(),
+
+  sobrelaterales: z.enum(['ninguno', 'chapa', 'rejilla']),
   toldo: z.boolean(),
   tapadera: z.boolean(),
   apoyaTableros: z.boolean(),
-  urlModelo3D: z.string(), // permitimos cualquier string
+
+  urlModelo3D: z.string(),
 });
 
-export type RemolqueInput = z.infer<typeof remolqueInputSchema>;
+export type RemolqueInput = z.infer<typeof remolqueSchema>;

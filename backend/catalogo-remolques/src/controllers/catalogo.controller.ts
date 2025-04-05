@@ -1,53 +1,66 @@
 ﻿import { Request, Response, NextFunction } from 'express';
-import CatalogoService from '../services/catalogo.service';
-import { remolqueInputSchema } from '../validators/remolque.validator';
+import * as catalogoService from '../services/catalogo.service';
+import { remolqueSchema } from '../validators/remolque.validator';
 
-export const obtenerRemolquesCatalogo = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const obtenerRemolques = async (_req: Request, res: Response) => {
+  const remolques = await catalogoService.obtenerRemolques();
+  res.json(remolques);
+};
+
+export const crearRemolque = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const remolques = await CatalogoService.obtenerRemolques();
-    res.status(200).json(remolques);
+    const data = remolqueSchema.parse(req.body); // Aquí verificamos que los datos son válidos
+    // Si no son válidos, se lanzará un error y se pasará al middleware de manejo de errores
+    const nuevoRemolque = await catalogoService.crearRemolque(data);
+    res.status(201).json(nuevoRemolque);
   } catch (error) {
-    next(error);
+    next(error); // delegamos al errorHandler
   }
 };
 
-export const obtenerRemolquePorId = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const obtenerRemolquePorId = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id);
-    const remolque = await CatalogoService.obtenerRemolquePorId(id);
-    if (!remolque) {
-      res.status(404).json({ error: 'Remolque no encontrado' });
-      return;
+
+    if (isNaN(id)) {
+      res.status(400).json({ error: "El ID debe ser un número entero" });
+      return
     }
-    res.status(200).json(remolque);
+
+    const remolque = await catalogoService.obtenerRemolquePorId(id);
+
+    if (!remolque) {
+      res.status(404).json({ error: "Remolque no encontrado" });
+      return
+    }
+
+    res.json(remolque);
   } catch (error) {
-    next(error);
+    next(error); // delegamos al errorHandler
   }
 };
 
-export const crearRemolque = async (
+export const eliminarRemolquePorId = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<void> => {
-  const parsed = remolqueInputSchema.safeParse(req.body);
-
-  if (!parsed.success) {
-    res.status(400).json({ error: parsed.error.format() });
-    return;
-  }
-
+) => {
   try {
-    const nuevo = await CatalogoService.crearRemolque(parsed.data);
-    res.status(201).json(nuevo);
+    const id = parseInt(req.params.id);
+
+    if (isNaN(id)) {
+      res.status(400).json({ error: "El ID debe ser un número entero" });
+      return;
+    }
+
+    const eliminado = await catalogoService.eliminarRemolquePorId(id);
+
+    if (!eliminado) {
+      res.status(404).json({ error: "Remolque no encontrado" });
+      return;
+    }
+
+    res.status(204).send(); // 204: No Content (eliminado correctamente)
   } catch (error) {
     next(error);
   }

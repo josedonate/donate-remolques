@@ -1,5 +1,7 @@
-export type MMA = '<=750kg' | '(750kg-3500kg]';
-export type TipoSobrelateral = 'ninguno' | 'chapa' | 'rejilla';
+import { Entity, PrimaryGeneratedColumn, Column, } from "typeorm";
+
+export type MMA = "<=750kg" | "(750kg-3500kg]";
+export type TipoSobrelateral = "ninguno" | "chapa" | "rejilla";
 
 export interface Dimensiones {
   ancho: number;
@@ -17,22 +19,50 @@ export interface Rueda {
   numeracionNeumatico: string;
 }
 
+@Entity({ name: "remolques" })
 export class Remolque {
-  constructor(
-    public id: number,
-    public familia: string,
-    public nombre: string,
-    public dimensiones: Dimensiones,
-    public mma: MMA,
-    public ejes: Ejes,
-    public freno: boolean,
-    public basculante: boolean,
-    public ruedaJockey: boolean,
-    public rueda: Rueda,
-    public sobrelaterales: TipoSobrelateral,
-    public toldo: boolean,
-    public tapadera: boolean,
-    public apoyaTableros: boolean,
-    public urlModelo3D: string
-  ) {}
+  @PrimaryGeneratedColumn() // 👈 Esto genera un número autoincremental
+  id!: number;
+
+  @Column()
+  familia!: string;
+
+  @Column()
+  nombre!: string;
+
+  @Column({ type: "jsonb" })
+  dimensiones!: Dimensiones;
+
+  @Column({ type: "enum", enum: ["<=750kg", "(750kg-3500kg]"] })
+  mma!: MMA;
+
+  @Column({ type: "jsonb" })
+  ejes!: Ejes;
+
+  @Column()
+  freno!: boolean;
+
+  @Column()
+  basculante!: boolean;
+
+  @Column()
+  ruedaJockey!: boolean;
+
+  @Column({ type: "jsonb" })
+  rueda!: Rueda;
+
+  @Column({ type: "enum", enum: ["ninguno", "chapa", "rejilla"] })
+  sobrelaterales!: TipoSobrelateral;
+
+  @Column()
+  toldo!: boolean;
+
+  @Column()
+  tapadera!: boolean;
+
+  @Column()
+  apoyaTableros!: boolean;
+
+  @Column()
+  urlModelo3D!: string;
 }

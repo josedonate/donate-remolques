@@ -1,10 +1,11 @@
 ﻿import { Router } from 'express';
-import { obtenerRemolquesCatalogo, obtenerRemolquePorId, crearRemolque } from '../controllers/catalogo.controller';
+import * as catalogoController from '../controllers/catalogo.controller';
 
 const router = Router();
 
-router.get('/remolques', obtenerRemolquesCatalogo);
-router.get('/remolques/:id', obtenerRemolquePorId);
-router.post('/remolques', crearRemolque);
+router.get('/remolques', catalogoController.obtenerRemolques);
+router.get('/remolques/:id', catalogoController.obtenerRemolquePorId);
+router.post('/remolques', catalogoController.crearRemolque);
+router.delete('/remolques/:id', catalogoController.eliminarRemolquePorId);
 
 export default router;
