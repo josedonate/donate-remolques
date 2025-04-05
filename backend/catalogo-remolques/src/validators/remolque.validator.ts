@@ -3,7 +3,7 @@ import { Dimensiones, Ejes, Rueda, MMA, TipoSobrelateral } from '../models/Remol
 
 export const remolqueSchema = z.object({
   familia: z.string(),
-  nombre: z.string(),
+  referencia: z.string(),
 
   dimensiones: z.object({
     ancho: z.number(),
@@ -27,10 +27,12 @@ export const remolqueSchema = z.object({
     numeracionNeumatico: z.string(),
   }).strict(),
 
-  sobrelaterales: z.enum(['ninguno', 'chapa', 'rejilla']),
-  toldo: z.boolean(),
-  tapadera: z.boolean(),
-  apoyaTableros: z.boolean(),
+  // Opcionales correctamente definidos
+  sobrelaterales: z.enum(['chapa', 'rejilla']).optional(),
+  toldo: z.boolean().optional(),
+  tapadera: z.boolean().optional(),
+  rampas: z.boolean().optional(),
+  apoyaTableros: z.boolean().optional(),
 
   urlModelo3D: z.string(),
 });

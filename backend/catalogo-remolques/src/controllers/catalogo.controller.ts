@@ -40,11 +40,7 @@ export const obtenerRemolquePorId = async (req: Request, res: Response, next: Ne
   }
 };
 
-export const eliminarRemolquePorId = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const eliminarRemolquePorId = async ( req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id);
 
@@ -61,6 +57,34 @@ export const eliminarRemolquePorId = async (
     }
 
     res.status(204).send(); // 204: No Content (eliminado correctamente)
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const actualizarRemolquePorId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = parseInt(req.params.id);
+
+    if (isNaN(id)) {
+      res.status(400).json({ error: "El ID debe ser un número entero" });
+      return;
+    }
+
+    const data = remolqueSchema.parse(req.body);
+
+    const actualizado = await catalogoService.actualizarRemolquePorId(id, data);
+
+    if (!actualizado) {
+      res.status(404).json({ error: "Remolque no encontrado" });
+      return;
+    }
+
+    res.json(actualizado);
   } catch (error) {
     next(error);
   }

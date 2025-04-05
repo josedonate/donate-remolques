@@ -1,5 +1,6 @@
 import { ErrorRequestHandler, Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
+import { ReglaNegocioError } from "../errors/ReglaNegocioError";
 
 // Middleware de manejo de errores global
 export const errorHandler: ErrorRequestHandler = (
@@ -19,6 +20,14 @@ export const errorHandler: ErrorRequestHandler = (
       detalles,
     });
     return;
+  }
+
+  if (err instanceof ReglaNegocioError) {
+    res.status(400).json({
+      error: "Regla de negocio no cumplida",
+      mensaje: err.message,
+    });
+    return 
   }
 
   console.error("🔴 Error no controlado:", err);

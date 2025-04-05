@@ -7,5 +7,6 @@ router.get('/remolques', catalogoController.obtenerRemolques);
 router.get('/remolques/:id', catalogoController.obtenerRemolquePorId);
 router.post('/remolques', catalogoController.crearRemolque);
 router.delete('/remolques/:id', catalogoController.eliminarRemolquePorId);
+router.put('/remolques/:id', catalogoController.actualizarRemolquePorId);
 
 export default router;
