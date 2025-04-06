@@ -1,8 +1,17 @@
-// Validamos el tipo de los datos que nos llegan a la API para asegurarnos de que son correctos y no se cuelan datos inválidos en la BBDD
-// y que no se rompa la API. Esto es importante para evitar errores en el frontend y asegurar que los datos son correctos antes de guardarlos en la base de datos.
-import { z } from 'zod';
-import { Dimensiones, Ejes, Rueda, LocalizacionRuedas, TipoSobrelateral } from '../models/Remolque';
+// Validamos el tipo de los datos que nos llegan a la API para asegurarnos de que son correctos
+// y que no se cuelan datos inválidos en la BBDD. Esto es importante para evitar errores en el frontend
+// y asegurar que los datos son correctos antes de guardarlos en la base de datos.
 
+import { z } from 'zod';
+import {
+  Dimensiones,
+  Ejes,
+  Rueda,
+  LocalizacionRuedas,
+  TipoSobrelateral
+} from '../models/Remolque';
+
+// Esquema completo para creación de remolques
 export const remolqueSchema = z.object({
   familia: z.string(),
   referencia: z.string(),
@@ -15,7 +24,7 @@ export const remolqueSchema = z.object({
 
   tara: z.number(),
 
-  mma: z.union([ // Estos son los valores que aceptamos para MMA
+  mma: z.union([
     z.literal(300),
     z.literal(500),
     z.literal(650),
@@ -28,7 +37,6 @@ export const remolqueSchema = z.object({
     z.literal(3000),
     z.literal(3500),
   ]),
-  
 
   ejes: z.object({
     numeroEjes: z.number(),
@@ -54,4 +62,9 @@ export const remolqueSchema = z.object({
   urlModelo3D: z.string(),
 });
 
+// Tipo TypeScript completo
 export type RemolqueInput = z.infer<typeof remolqueSchema>;
+
+// Esquema para PATCH (modificación parcial)
+export const remolqueParcialSchema = remolqueSchema.partial();
+export type RemolqueParcialInput = z.infer<typeof remolqueParcialSchema>;

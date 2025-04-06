@@ -34,13 +34,13 @@ export class Remolque {
   familia!: string;
 
   @Column({ unique: true })
-  referencia!: string;
+  referencia!: string; // Referencia unica del remolque
 
   @Column({ type: "jsonb" })
-  dimensiones!: Dimensiones;
+  dimensiones!: Dimensiones; // Ancho, largo y alto de la caja remolque
 
   @Column()
-  tara!: number;
+  tara!: number; // Peso vacío del remolque sin carga
 
   @Column()
   mma!: number;

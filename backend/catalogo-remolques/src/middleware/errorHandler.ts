@@ -1,6 +1,7 @@
 import { ErrorRequestHandler, Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 import { ReglaNegocioError } from "../errors/ReglaNegocioError";
+import { QueryFailedError } from "typeorm";
 
 // Middleware de manejo de errores global
 export const errorHandler: ErrorRequestHandler = (
@@ -26,6 +27,15 @@ export const errorHandler: ErrorRequestHandler = (
     res.status(400).json({
       error: "Regla de negocio no cumplida",
       mensaje: err.message,
+    });
+    return 
+  }
+
+  // 🚨 Error por clave duplicada (referencia única)
+  if (err instanceof QueryFailedError && (err as any).code === "23505") {
+    res.status(409).json({
+      error: "Referencia duplicada",
+      mensaje: "Ya existe un remolque con esa referencia.",
     });
     return 
   }

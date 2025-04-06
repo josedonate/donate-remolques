@@ -1,6 +1,7 @@
 ﻿import { Request, Response, NextFunction } from 'express';
 import * as catalogoService from '../services/catalogo.service';
 import { remolqueSchema } from '../validators/remolque.validator';
+import { remolqueParcialSchema } from "../validators/remolque.validator";
 
 export const obtenerRemolques = async (_req: Request, res: Response) => {
   const remolques = await catalogoService.obtenerRemolques();
@@ -82,6 +83,32 @@ export const actualizarRemolquePorId = async (
     if (!actualizado) {
       res.status(404).json({ error: "Remolque no encontrado" });
       return;
+    }
+
+    res.json(actualizado);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const modificarParcialmenteRemolque = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ error: "El ID debe ser un número entero" });
+      return
+    }
+
+    const data = remolqueParcialSchema.parse(req.body); // ✅ validación parcial
+
+    const actualizado = await catalogoService.actualizarRemolquePorId(id, data);
+    if (!actualizado) {
+      res.status(404).json({ error: "Remolque no encontrado" });
+      return
     }
 
     res.json(actualizado);
