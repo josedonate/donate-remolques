@@ -11,4 +11,5 @@ export interface RemolqueTarjetaDTO {
   ejes: {
     numeroEjes: number
   }
+  urlImagen: string
 }

@@ -10,6 +10,7 @@ import {
   LocalizacionRuedas,
   TipoSobrelateral
 } from '../models/Remolque';
+import { url } from 'inspector';
 
 // Esquema completo para creación de remolques
 export const remolqueSchema = z.object({
@@ -60,6 +61,7 @@ export const remolqueSchema = z.object({
   apoyaTableros: z.boolean().optional(),
 
   urlModelo3D: z.string(),
+  urlImagen: z.string().url().optional(), // URL de la imagen del remolque
 });
 
 // Tipo TypeScript completo

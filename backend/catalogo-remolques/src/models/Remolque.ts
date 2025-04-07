@@ -82,6 +82,10 @@ export class Remolque {
   @Column()
   urlModelo3D!: string;
 
+  @Column({ nullable: true })
+  // URL de la imagen del remolque
+  urlImagen?: string;
+
   @AfterLoad()
   setCategoria() {
     this.categoria = this.mma <= 750 ? "O1" : "O2";

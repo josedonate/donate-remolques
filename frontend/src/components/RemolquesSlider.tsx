@@ -43,6 +43,7 @@ export default function RemolquesSlider() {
               mma={remolque.mma}
               dimensiones={remolque.dimensiones}
               ejes={remolque.ejes}
+              urlImagen={remolque.urlImagen}
             />
         ))}
       </div>

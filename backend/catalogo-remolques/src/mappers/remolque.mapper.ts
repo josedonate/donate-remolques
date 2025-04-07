@@ -15,6 +15,7 @@ export function toRemolqueTarjetaDTO(remolque: Remolque): RemolqueTarjetaDTO {
     ejes: {
       numeroEjes: remolque.ejes.numeroEjes,
     },
+    urlImagen: remolque.urlImagen || '', // Aseguramos que la URL de la imagen no sea undefined
   }
 }
 
