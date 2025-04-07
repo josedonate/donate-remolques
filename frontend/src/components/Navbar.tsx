@@ -2,12 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, BookOpen, MapPin } from 'lucide-react'
 import clsx from 'clsx'
 
 const navLinks = [
-  { label: 'Historia', href: '/historia' },
-  { label: 'Localización', href: '/localizacion' },
   { label: 'Remolques', href: '/remolques' },
   { label: 'Configurador', href: '/configurador' },
   { label: 'Repuestos', href: '/repuestos' },
@@ -17,34 +15,45 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
-      <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="text-2xl font-logo tracking-wide">
+    <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
+      <div className="mx-auto max-w px-6 py-9 flex items-center justify-between">
+        {/* Logo Donate */}
+        <Link
+          href="/"
+          className="text-5xl font-logo tracking-wide text-black"
+        >
           Donate
         </Link>
 
-        {/* Links visibles solo en escritorio */}
-        <nav className="hidden md:flex gap-6 text-sm font-medium">
-          <Link href="/historia" className="hover:text-gray-600 transition">
+        {/* Enlaces fijos solo en escritorio (alineados a la derecha) */}
+        <nav className="hidden md:flex gap-8 text-2xl font-medium text-gray-700 ml-auto">
+          <Link
+            href="/historia"
+            className="flex items-center gap-2 hover:text-black transition"
+          >
+            <BookOpen size={25} />
             Historia
           </Link>
-          <Link href="/localizacion" className="hover:text-gray-600 transition">
+          <Link
+            href="/localizacion"
+            className="flex items-center gap-2 hover:text-black transition"
+          >
+            <MapPin size={25} />
             Localización
           </Link>
         </nav>
 
-        {/* Botón menú hamburguesa (siempre visible) */}
+        {/* Menú hamburguesa (solo visible en móvil) */}
         <button
           className="md:hidden z-50"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Abrir menú"
         >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          {menuOpen ? <X size={40} /> : <Menu size={40} />}
         </button>
       </div>
 
-      {/* Menú desplegable (móvil y escritorio) */}
+      {/* Menú desplegable solo en móvil */}
       <div
         className={clsx(
           'md:hidden absolute top-full left-0 w-full bg-white shadow transition-all duration-300',
@@ -52,11 +61,27 @@ export default function Navbar() {
         )}
       >
         <nav className="flex flex-col items-center gap-4 text-base font-medium">
+          <Link
+            href="/historia"
+            className="flex items-center gap-2 hover:text-black transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            <BookOpen size={18} />
+            Historia
+          </Link>
+          <Link
+            href="/localizacion"
+            className="flex items-center gap-2 hover:text-black transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            <MapPin size={18} />
+            Localización
+          </Link>
           {navLinks.map(({ label, href }) => (
             <Link
               key={href}
               href={href}
-              className="hover:text-gray-700 transition"
+              className="hover:text-black transition"
               onClick={() => setMenuOpen(false)}
             >
               {label}
@@ -64,6 +89,6 @@ export default function Navbar() {
           ))}
         </nav>
       </div>
-    </header>
+    </nav>
   )
 }

@@ -13,16 +13,16 @@ export default function SectionTag({ title, description, href, Icon }: SectionTa
   return (
     <Link
       href={href}
-      className="w-full max-w-xl border rounded-xl p-5 flex items-center justify-between hover:shadow-md transition group"
+      className="w-full max-w-5xl border rounded-2xl p-6 flex items-center justify-between hover:shadow-lg transition group bg-white"
     >
-      <div className="flex items-center gap-4">
-        <Icon className="w-10 h-10 text-gray-700 group-hover:text-black transition" />
+      <div className="flex items-center gap-6">
+        <Icon className="w-14 h-14 text-gray-700 group-hover:text-black transition" />
         <div>
-          <h3 className="text-xl font-semibold">{title}</h3>
-          <p className="text-sm text-gray-600">{description}</p>
+          <h3 className="text-2xl font-semibold">{title}</h3>
+          <p className="text-base text-gray-600">{description}</p>
         </div>
       </div>
-      <ArrowRight className="w-6 h-6 text-gray-400 group-hover:translate-x-1 transition" />
+      <ArrowRight className="w-7 h-7 text-gray-400 group-hover:translate-x-1 transition" />
     </Link>
   )
 }

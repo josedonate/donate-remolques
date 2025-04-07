@@ -31,8 +31,8 @@ export default function RemolquesSlider() {
   }
 
   return (
-    <section className="mt-12">
-      <h2 className="text-xl font-semibold mb-4">Remolques destacados:</h2>
+    <section className="mt-10">
+      <h2 className="text-3xl font-semibold mb-4">Remolques destacados:</h2>
       <div className="px-1 py-2 flex overflow-x-auto gap-4 pb-2 relative z-0">
         {remolques.map((remolque) => (
             <RemolqueCard

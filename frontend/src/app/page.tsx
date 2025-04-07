@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import SectionTag from '@/components/SectionTag'
-import RemolquesSlider from '@/components/RemolquesSlider'
-import { Truck, Wrench, Package } from 'lucide-react'
+import SectionTag from "@/components/SectionTag";
+import RemolquesSlider from "@/components/RemolquesSlider";
+import { Caravan, Wrench, Bolt } from "lucide-react";
 
 export default function HomePage() {
   return (
     <div className="space-y-12 py-8">
       {/* Accesos rápidos con iconos */}
-      <section className="flex flex-col items-center gap-6">
+      <section className="mt-22 flex flex-col items-center gap-10">
         <SectionTag
           title="Remolques"
           description="Catálogo con los modelos estándar"
           href="/remolques"
-          Icon={Truck}
+          Icon={Caravan}
         />
         <SectionTag
           title="Configurador"
@@ -25,12 +25,14 @@ export default function HomePage() {
           title="Repuestos"
           description="Accede a la tienda de repuestos"
           href="/repuestos"
-          Icon={Package}
+          Icon={Bolt}
         />
       </section>
 
       {/* Slider con remolques reales desde el backend */}
-      <RemolquesSlider />
+      <section className="flex flex-col items-center gap-6">
+        <RemolquesSlider />
+      </section>
     </div>
-  )
+  );
 }
