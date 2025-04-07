@@ -2,11 +2,19 @@
 import * as catalogoService from '../services/catalogo.service';
 import { remolqueSchema } from '../validators/remolque.validator';
 import { remolqueParcialSchema } from "../validators/remolque.validator";
+import { toRemolqueTarjetaDTO } from '../mappers/remolque.mapper';
 
 export const obtenerRemolques = async (_req: Request, res: Response) => {
   const remolques = await catalogoService.obtenerRemolques();
   res.json(remolques);
 };
+
+export const obtenerRemolquesTarjeta = async (_req: Request, res: Response) => {
+  const remolques = await catalogoService.obtenerRemolques()
+  const dtos = remolques.map(toRemolqueTarjetaDTO)
+  res.json(dtos)
+}
+
 
 export const crearRemolque = async (req: Request, res: Response, next: NextFunction) => {
   try {

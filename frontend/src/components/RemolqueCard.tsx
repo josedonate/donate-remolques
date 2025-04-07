@@ -1,47 +1,44 @@
-import Link from 'next/link'
+import Link from "next/link";
+import { RemolqueTarjetaDTO } from "@/types/remolque";
 
-interface RemolqueCardProps {
-  referencia: string
-  imagen?: string
-  mma: number
-  tara: number
-  freno: boolean
-  id: string
-}
+type Props = RemolqueTarjetaDTO;
 
 export default function RemolqueCard({
-  referencia,
-  imagen,
-  mma,
-  tara,
-  freno,
   id,
-}: RemolqueCardProps) {
+  referencia,
+  familia,
+  mma,
+  dimensiones,
+  ejes,
+}: Props) {
   return (
-    <div className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition bg-white w-72 flex flex-col">
-      {/* Imagen del remolque */}
-      <div className="h-40 bg-gray-200 flex items-center justify-center">
-        {imagen ? (
-          <img src={imagen} alt={referencia} className="h-full w-full object-cover" />
-        ) : (
-          <span className="text-gray-500">Imagen no disponible</span>
-        )}
+    <Link
+      href={`/remolques/${id}`}
+      className="w-64 rounded-md overflow-hidden border shadow-sm hover:shadow-lg hover:scale-[1.02] transform-gpu will-change-transform transition-all bg-white flex flex-col z-10 relative"
+    >
+      {/* Imagen */}
+      <div className="h-28 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
+        Imagen no disponible
       </div>
 
       {/* Contenido */}
-      <div className="p-4 flex flex-col gap-2 flex-1">
-        <h3 className="text-lg font-semibold">{referencia}</h3>
-        <p className="text-sm text-gray-600">MMA: {mma} kg</p>
-        <p className="text-sm text-gray-600">Tara: {tara} kg</p>
-        <p className="text-sm text-gray-600">Freno: {freno ? 'Sí' : 'No'}</p>
-
-        <Link
-          href={`/remolques/${id}`}
-          className="mt-auto text-blue-600 hover:underline text-sm font-medium"
-        >
-          Ver detalles
-        </Link>
+      <div className="p-3 flex flex-col gap-1 text-sm text-gray-800">
+        <h3 className="text-base font-bold mb-1">{referencia}</h3>
+        <p>
+          <span className="font-semibold">Familia:</span> {familia}
+        </p>
+        <p>
+          <span className="font-semibold">Dimensiones:</span>{" "}
+          {dimensiones.ancho}×{dimensiones.largo}
+          {dimensiones.alto ? `×${dimensiones.alto}` : ""} cm
+        </p>
+        <p>
+          <span className="font-semibold">MMA:</span> {mma} kg
+        </p>
+        <p>
+          <span className="font-semibold">Ejes:</span> {ejes.numeroEjes}
+        </p>
       </div>
-    </div>
-  )
+    </Link>
+  );
 }
