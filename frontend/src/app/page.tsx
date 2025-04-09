@@ -2,13 +2,16 @@
 
 import SectionTag from "@/components/SectionTag";
 import RemolquesSlider from "@/components/RemolquesSlider";
+import RemolqueIntro from "@/components/RemolqueIntro";
 import { Caravan, Wrench, Bolt } from "lucide-react";
 
 export default function HomePage() {
   return (
-    <div className="space-y-12 py-8">
-      {/* Accesos rápidos con iconos */}
-      <section className="mt-22 flex flex-col items-center gap-10">
+    <div className="space-y-12 py-12">
+      {/* Componente para mostrar el remolque 3D */}
+      <RemolqueIntro />
+      {/* Banner de bienvenida */}
+      <section className="mt-0 flex flex-col items-center gap-10">
         <SectionTag
           title="Remolques"
           description="Catálogo con los modelos estándar"

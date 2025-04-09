@@ -9,7 +9,6 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ['var(--font-manrope)', 'sans-serif'],
-        logo: ['var(--font-anton)', 'sans-serif'],
       },
     },
   },

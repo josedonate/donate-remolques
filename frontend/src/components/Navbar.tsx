@@ -17,13 +17,13 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
-      <div className="mx-auto max-w px-6 py-9 flex items-center justify-between">
+      <div className="mx-auto max-w px-10 py-6 flex items-center justify-between">
         {/* Logo Donate */}
         <Link href="/" className="flex items-center">
           <Image 
             src="/donate_logo_web.png"
             alt="Logo Donate"
-            width={270}
+            width={250}
             height={48}
             priority
           />
