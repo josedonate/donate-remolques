@@ -1,10 +1,12 @@
+"use client";
+
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, useGLTF, Text, Billboard } from "@react-three/drei";
-import { Suspense, useRef } from "react";
+import { Environment, useGLTF } from "@react-three/drei";
+import { Suspense, useRef, useState } from "react";
 import * as THREE from "three";
 
-function RemolqueModel() {
-  const gltf = useGLTF("/models/remolque.glb");
+function RemolqueModel({ onLoad }: { onLoad: () => void }) {
+  const gltf = useGLTF("/models/remolque.glb", true);
   const ref = useRef<THREE.Object3D>(null!);
 
   useFrame(() => {
@@ -13,49 +15,37 @@ function RemolqueModel() {
     }
   });
 
-  return  (
-    <primitive 
-      object={gltf.scene} 
-      scale={0.9} 
+  useState(() => {
+    if (gltf && gltf.scene) {
+      onLoad();
+    }
+  });
+
+  return (
+    <primitive
+      object={gltf.scene}
+      scale={1.6}
       ref={ref}
-      position={[0, -0.5, 0]}
+      position={[0, -1, 0]}
     />
   );
 }
 
-function RemolquesDonateText() {
-  return (
-    <Billboard 
-      follow={true}       // hace que el billboard siempre mire a la cámara
-      lockX={false}
-      lockY={false}
-      lockZ={false}
-      position={[-5, 0.7, 0]} 
-    >
-      <Text
-        font="/fonts/Geliat-ExtraBold.otf"
-        fontSize={0.8}
-        color="#008fc3"
-        anchorX="left"
-        anchorY="bottom"
-        material-toneMapped={false}
-        material-transparent={false}
-        material-opacity={1}
-      >
-        REMOLQUES DONATE
-      </Text>
-    </Billboard>
-  );
-}
-
 export default function RemolqueIntro() {
+  const [modeloCargado, setModeloCargado] = useState(false);
+
   return (
-    <div className="w-full h-[420px] mb-6 overflow-hidden bg-[var(--background)]">
+    <div className="relative w-full h-[420px] mb-6 overflow-hidden bg-[var(--background)]">
+      {modeloCargado && (
+        <h1 className="absolute top-13 left-1/2 -translate-x-1/2 text-[#008fc3] text-5xl font-extrabold text-center z-10">
+          REMOLQUES DONATE
+        </h1>
+      )}
+
       <Canvas camera={{ position: [8, 2, 5], fov: 40 }}>
         <ambientLight intensity={0.6} />
         <Suspense fallback={null}>
-          <RemolqueModel />
-          <RemolquesDonateText />
+          <RemolqueModel onLoad={() => setModeloCargado(true)} />
           <Environment preset="sunset" />
         </Suspense>
       </Canvas>

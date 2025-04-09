@@ -1,7 +1,7 @@
 "use client";
 
 import SectionTag from "@/components/SectionTag";
-import RemolquesSlider from "@/components/RemolquesSlider";
+import RemolquesSlider from "@/components/RemolqueSlider";
 import RemolqueIntro from "@/components/RemolqueIntro";
 import { Caravan, Wrench, Bolt } from "lucide-react";
 

@@ -11,8 +11,10 @@
   "dependencies": {
     "@react-three/drei": "^10.0.6",
     "@react-three/fiber": "^9.1.2",
+    "animejs": "^4.0.1",
     "axios": "^1.8.4",
     "clsx": "^2.1.1",
+    "keen-slider": "^6.8.6",
     "lucide-react": "^0.487.0",
     "next": "15.2.4",
     "react": "^19.0.0",

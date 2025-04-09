@@ -12,26 +12,6 @@
   }
 }
 
-@keyframes fall {
-  0% {
-    transform: translateY(-80px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes bounce-x {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-}
-
 .animate-bounce-x {
   animation: bounce-x 2.4s ease-in-out infinite;
 }
