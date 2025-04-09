@@ -1,30 +1,33 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Menu, X, BookOpen, MapPin } from 'lucide-react'
-import clsx from 'clsx'
+import { useState } from "react";
+import Link from "next/link";
+import { Menu, X, BookOpen, MapPin } from "lucide-react";
+import clsx from "clsx";
+import Image from "next/image";
 
 const navLinks = [
-  { label: 'Remolques', href: '/remolques' },
-  { label: 'Configurador', href: '/configurador' },
-  { label: 'Repuestos', href: '/repuestos' },
-]
+  { label: "Remolques", href: "/remolques" },
+  { label: "Configurador", href: "/configurador" },
+  { label: "Repuestos", href: "/repuestos" },
+];
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
       <div className="mx-auto max-w px-6 py-9 flex items-center justify-between">
         {/* Logo Donate */}
-        <Link
-          href="/"
-          className="text-5xl font-logo tracking-wide text-black"
-        >
-          Donate
+        <Link href="/" className="flex items-center">
+          <Image 
+            src="/donate_logo_web.png"
+            alt="Logo Donate"
+            width={270}
+            height={48}
+            priority
+          />
         </Link>
-
         {/* Enlaces fijos solo en escritorio (alineados a la derecha) */}
         <nav className="hidden md:flex gap-8 text-2xl font-medium text-gray-700 ml-auto">
           <Link
@@ -56,8 +59,10 @@ export default function Navbar() {
       {/* Menú desplegable solo en móvil */}
       <div
         className={clsx(
-          'md:hidden absolute top-full left-0 w-full bg-white shadow transition-all duration-300',
-          menuOpen ? 'max-h-96 py-4 opacity-100' : 'max-h-0 overflow-hidden opacity-0'
+          "md:hidden absolute top-full left-0 w-full bg-white shadow transition-all duration-300",
+          menuOpen
+            ? "max-h-96 py-4 opacity-100"
+            : "max-h-0 overflow-hidden opacity-0"
         )}
       >
         <nav className="flex flex-col items-center gap-4 text-base font-medium">
@@ -90,5 +95,5 @@ export default function Navbar() {
         </nav>
       </div>
     </nav>
-  )
+  );
 }
