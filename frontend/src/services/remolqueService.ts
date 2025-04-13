@@ -1,7 +1,24 @@
 import axios from "@/lib/axios";
 import { RemolqueTarjetaDTO } from "@/types/remolque";
 
-export async function getRemolquesTarjeta(): Promise<RemolqueTarjetaDTO[]> {
-  const { data } = await axios.get<RemolqueTarjetaDTO[]>("/remolques/tarjetas");
+interface QueryParams {
+  page?: number;
+  limit?: number;
+  familia?: string;
+  mma?: number;
+  ejes?: number;
+}
+
+interface PaginatedRemolquesResponse {
+  content: RemolqueTarjetaDTO[];
+  totalElements: number;
+  totalPages: number;
+  currentPage: number;
+}
+
+export async function getRemolquesTarjeta(
+  params?: QueryParams
+): Promise<PaginatedRemolquesResponse> {
+  const { data } = await axios.get<PaginatedRemolquesResponse>("/remolques/tarjetas", { params });
   return data;
 }

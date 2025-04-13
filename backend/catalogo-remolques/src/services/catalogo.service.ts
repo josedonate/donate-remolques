@@ -5,6 +5,12 @@ import { aplicarReglasNegocioRemolque } from '../utils/reglasNegocioRemolque';
 
 const repo = AppDataSource.getRepository(Remolque); // Repositorio de Remolque
 
+interface FiltrosRemolque {
+  familia?: string;
+  mma?: number;
+  ejes?: number;
+}
+
 export const obtenerRemolques = async (): Promise<Remolque[]> => {
   return await repo.find();
 };
@@ -38,5 +44,36 @@ export const actualizarRemolquePorId = async (
   return await repo.save(merged);
 };
 
+export const obtenerRemolquesFiltrados = async (
+  page: number,
+  limit: number,
+  filtros: FiltrosRemolque
+) => {
+  const skip = (page - 1) * limit;
 
+  const query = repo.createQueryBuilder("remolque");
+
+  if (filtros.familia) {
+    query.andWhere("remolque.familia = :familia", { familia: filtros.familia });
+  }
+
+  if (filtros.mma) {
+    query.andWhere("remolque.mma = :mma", { mma: filtros.mma });
+  }
+
+  if (filtros.ejes) {
+    query.andWhere(`remolque.ejes->>'numeroEjes' = :ejes`, { ejes: filtros.ejes.toString() });
+  }
+  
+
+
+  query.skip(skip).take(limit);
+
+  const [result, total] = await query.getManyAndCount();
+
+  return {
+    remolques: result,
+    total,
+  };
+};
 

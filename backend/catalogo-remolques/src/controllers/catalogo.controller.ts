@@ -9,11 +9,26 @@ export const obtenerRemolques = async (_req: Request, res: Response) => {
   res.json(remolques);
 };
 
-export const obtenerRemolquesTarjeta = async (_req: Request, res: Response) => {
-  const remolques = await catalogoService.obtenerRemolques()
-  const dtos = remolques.map(toRemolqueTarjetaDTO)
-  res.json(dtos)
-}
+export const obtenerRemolquesTarjeta = async (req: Request, res: Response) => {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 12;
+
+  const filtros = {
+    familia: req.query.familia as string | undefined,
+    mma: req.query.mma ? parseInt(req.query.mma as string) : undefined,
+    ejes: req.query.ejes ? parseInt(req.query.ejes as string) : undefined,
+  };
+
+  const { remolques, total } = await catalogoService.obtenerRemolquesFiltrados(page, limit, filtros);
+  const dtos = remolques.map(toRemolqueTarjetaDTO);
+
+  res.json({
+    content: dtos,
+    totalElements: total,
+    totalPages: Math.ceil(total / limit),
+    currentPage: page,
+  });
+};
 
 
 export const crearRemolque = async (req: Request, res: Response, next: NextFunction) => {
