@@ -24,31 +24,52 @@ export function useRemolques() {
     return { remolques, loading };
   }
 
-export function useRemolquesCatalogo() {
-  const [remolques, setRemolques] = useState<RemolqueTarjetaDTO[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [filtros, setFiltros] = useState<FiltrosCatalogo>({});
-
-  useEffect(() => {
-    setLoading(true);
-    getRemolquesTarjeta({ page, limit: 8, ...filtros })
-      .then((res) => {
-        setRemolques(res.content);
-        setTotalPages(res.totalPages);
+  export function useRemolquesCatalogo() {
+    const [remolques, setRemolques] = useState<RemolqueTarjetaDTO[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [filtros, setFiltros] = useState<FiltrosCatalogo>({});
+    const [sort, setSort] = useState<string>("");
+  
+    useEffect(() => {
+      setLoading(true);
+  
+      // Interpretar sort
+      let sortParam;
+      let direction: "asc" | "desc" | undefined;
+  
+      if (sort.includes("_")) {
+        const [campo, dir] = sort.split("_");
+        sortParam = campo;
+        direction = dir as "asc" | "desc";
+      }
+  
+      getRemolquesTarjeta({
+        page,
+        limit: 8,
+        ...filtros,
+        sort: sortParam,
+        direction,
       })
-      .catch((err) => console.error("Error cargando remolques:", err))
-      .finally(() => setLoading(false));
-  }, [page, filtros]);
-
-  return {
-    remolques,
-    loading,
-    page,
-    setPage,
-    totalPages,
-    filtros,
-    setFiltros,
-  };
-}
+        .then((res) => {
+          setRemolques(res.content);
+          setTotalPages(res.totalPages);
+        })
+        .catch((err) => console.error("Error cargando remolques:", err))
+        .finally(() => setLoading(false));
+    }, [page, filtros, sort]);
+  
+    return {
+      remolques,
+      loading,
+      page,
+      setPage,
+      totalPages,
+      filtros,
+      setFiltros,
+      sort,
+      setSort,
+    };
+  }
+  

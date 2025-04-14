@@ -18,7 +18,11 @@ export default function SortDropdown({ value, onChange }: Props) {
     { value: "mma_desc", label: "MMA (mayor a menor)" },
   ];
 
-  const selectedLabel = opciones.find((o) => o.value === value)?.label || "Ordenar por";
+  const selectedOption = opciones.find((o) => o.value === value);
+const selectedLabel = selectedOption
+  ? `Ordenar por: ${selectedOption.label}`
+  : "Ordenar por";
+
 
   return (
     <div className="relative inline-block text-left">

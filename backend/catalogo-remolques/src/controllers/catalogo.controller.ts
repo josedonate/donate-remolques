@@ -12,6 +12,9 @@ export const obtenerRemolques = async (_req: Request, res: Response) => {
 export const obtenerRemolquesTarjeta = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 12;
+  const sort = req.query.sort as string | undefined;
+  const direction = (req.query.direction as "asc" | "desc") || "asc";
+
 
   const filtros = {
     familia: req.query.familia as string | undefined,
@@ -19,7 +22,7 @@ export const obtenerRemolquesTarjeta = async (req: Request, res: Response) => {
     ejes: req.query.ejes ? parseInt(req.query.ejes as string) : undefined,
   };
 
-  const { remolques, total } = await catalogoService.obtenerRemolquesFiltrados(page, limit, filtros);
+  const { remolques, total } = await catalogoService.obtenerRemolquesFiltrados(page, limit, filtros, sort, direction);  
   const dtos = remolques.map(toRemolqueTarjetaDTO);
 
   res.json({

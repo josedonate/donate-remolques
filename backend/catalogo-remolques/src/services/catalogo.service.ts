@@ -47,7 +47,9 @@ export const actualizarRemolquePorId = async (
 export const obtenerRemolquesFiltrados = async (
   page: number,
   limit: number,
-  filtros: FiltrosRemolque
+  filtros: FiltrosRemolque,
+  sort?: string,
+  direction: "asc" | "desc" = "asc"
 ) => {
   const skip = (page - 1) * limit;
 
@@ -57,14 +59,20 @@ export const obtenerRemolquesFiltrados = async (
     query.andWhere("remolque.familia = :familia", { familia: filtros.familia });
   }
 
-  if (filtros.mma) {
-    query.andWhere("remolque.mma = :mma", { mma: filtros.mma });
+  if (filtros.mma === 750) {
+    query.andWhere("remolque.mma <= :mma", { mma: 750 });
+  } else if (filtros.mma === 3500) {
+    query.andWhere("remolque.mma > 750 AND remolque.mma <= 3500");
   }
 
   if (filtros.ejes) {
     query.andWhere(`remolque.ejes->>'numeroEjes' = :ejes`, { ejes: filtros.ejes.toString() });
   }
   
+  const allowedSortFields = ["referencia", "mma"]; // Para evitar SQL injection, solo permitimos estos campos
+  if (sort && allowedSortFields.includes(sort)) {
+    query.orderBy(`remolque.${sort}`, direction.toUpperCase() as "ASC" | "DESC");
+  }
 
 
   query.skip(skip).take(limit);

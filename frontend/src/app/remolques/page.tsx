@@ -18,9 +18,10 @@ export default function CatalogoRemolquesPage() {
     totalPages,
     filtros,
     setFiltros,
+    sort,
+    setSort,
   } = useRemolquesCatalogo();
 
-  const [sort, setSort] = useState(""); // Orden actual
   const [filtersVisible, setFiltersVisible] = useState(true);
 
   const handleClearFilters = () => {

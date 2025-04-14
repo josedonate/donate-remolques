@@ -7,7 +7,10 @@ interface QueryParams {
   familia?: string;
   mma?: number;
   ejes?: number;
+  sort?: string;
+  direction?: "asc" | "desc";
 }
+
 
 interface PaginatedRemolquesResponse {
   content: RemolqueTarjetaDTO[];
