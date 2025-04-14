@@ -6,63 +6,79 @@ import RemolqueFilters from "@/components/remolques-components/RemolqueFilters";
 import RemolqueFiltersMobile from "@/components/remolques-components/RemolqueFiltersMobile";
 import SortDropdown from "@/components/remolques-components/SortDropdown";
 import RemolquesGrid from "@/components/remolques-components/RemolquesGrid";
+import { SlidersHorizontal } from "lucide-react";
+
 
 export default function CatalogoRemolquesPage() {
-  const { remolques, loading, page, setPage, totalPages, filtros, setFiltros } =
-    useRemolquesCatalogo();
+  const {
+    remolques,
+    loading,
+    page,
+    setPage,
+    totalPages,
+    filtros,
+    setFiltros,
+  } = useRemolquesCatalogo();
 
-  const [sort, setSort] = useState("");
+  const [sort, setSort] = useState(""); // Orden actual
   const [filtersVisible, setFiltersVisible] = useState(true);
 
   const handleClearFilters = () => {
     setPage(1);
     setFiltros({});
+    setSort("");
   };
 
   return (
     <main className="min-h-screen px-4 pt-12">
-      {/* Título + Botones (sticky header en desktop) */}
+      {/* Sticky header (desktop) */}
       <div className="hidden lg:flex justify-between items-center sticky top-[122px] bg-white z-20 py-4 max-w-screen-xl mx-auto border-b">
         <h1 className="text-2xl font-bold">Catálogo de Remolques</h1>
         <div className="flex gap-3">
-          <button
-            onClick={() => setFiltersVisible(!filtersVisible)}
-            className="text-xs h-9 px-3 py-1 border rounded bg-white shadow-sm hover:bg-gray-100"
-          >
-            {filtersVisible ? "Ocultar filtros" : "Mostrar filtros"}
-          </button>
+        <button
+          onClick={() => setFiltersVisible(!filtersVisible)}
+          className="text-sm h-9 px-3 py-3 border rounded bg-white shadow-sm hover:bg-gray-100 flex items-center gap-2"
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          {filtersVisible ? "Ocultar filtros" : "Mostrar filtros"}
+        </button>
+
           <SortDropdown value={sort} onChange={setSort} />
         </div>
       </div>
 
       {/* Top bar móvil */}
-      <div className="lg:hidden flex justify-between items-center max-w-screen-xl mx-auto pt-12 mb-4">
+      <div className="lg:hidden sticky top-[120px] z-20 bg-white border-b py-4 flex justify-between items-center max-w-screen-xl mx-auto">
+      <h1
+        className="font-bold whitespace-nowrap"
+        style={{ fontSize: "clamp(1rem, 5vw, 1.25rem)" }}
+      >
+        Catálogo de Remolques
+      </h1>
         <RemolqueFiltersMobile
           filtros={filtros}
           setFiltros={(f) => {
             setPage(1);
             setFiltros(f);
           }}
+          sort={sort}
+          setSort={setSort}
           onClear={handleClearFilters}
         />
-        <SortDropdown value={sort} onChange={setSort} />
       </div>
+
 
       {/* Layout horizontal */}
       <div className="flex gap-6 max-w-screen-xl mx-auto mt-[64px]">
-        {/* Sidebar filtros (sticky y alineado con el grid) */}
+        {/* Sidebar de filtros (desktop) */}
         <div
-          className={`
-            hidden lg:block transition-all duration-500 ease-in-out
-            ${
-              filtersVisible
-                ? "max-w-[16rem] w-64 opacity-100"
-                : "max-w-0 w-0 opacity-0 pointer-events-none"
-            }
-          `}
+          className={`hidden lg:block transition-all duration-500 ease-in-out ${
+            filtersVisible
+              ? "max-w-[16rem] w-64 opacity-100"
+              : "max-w-0 w-0 opacity-0 pointer-events-none"
+          }`}
         >
           <div className="sticky top-[210px]">
-            {/* top = altura del navbar + top del bloque de título */}
             <RemolqueFilters
               filtros={filtros}
               setFiltros={(f) => {

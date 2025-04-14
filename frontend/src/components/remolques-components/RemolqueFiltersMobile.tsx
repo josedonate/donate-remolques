@@ -2,25 +2,51 @@
 
 import { useState } from "react";
 import { FiltrosCatalogo } from "@/hooks/useRemolques";
-import { SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react";
 
 interface Props {
   filtros: FiltrosCatalogo;
   setFiltros: (f: FiltrosCatalogo) => void;
+  sort: string;
+  setSort: (s: string) => void;
   onClear: () => void;
 }
 
-export default function RemolqueFiltersMobile({ filtros, setFiltros, onClear }: Props) {
+export default function RemolqueFiltersMobile({
+  filtros,
+  setFiltros,
+  sort,
+  setSort,
+  onClear,
+}: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const [localFiltros, setLocalFiltros] = useState(filtros);
+  const [localSort, setLocalSort] = useState(sort);
 
-  const handleClose = () => setIsOpen(false);
+  const numFiltrosActivos = Object.values(localFiltros).filter(Boolean).length;
+
+  const handleApply = () => {
+    setFiltros(localFiltros);
+    setSort(localSort);
+    setIsOpen(false);
+  };
+
+  const handleClear = () => {
+    setLocalFiltros({});
+    setLocalSort("");
+    onClear();
+  };
 
   return (
     <>
-      {/* Botón superior para abrir el drawer */}
-      <div className="flex justify-between items-center sm:hidden mb-4">
+      {/* Botón de apertura */}
+      <div className="flex justify-end w-full">
         <button
-          onClick={() => setIsOpen(true)}
+          onClick={() => {
+            setLocalFiltros(filtros);
+            setLocalSort(sort);
+            setIsOpen(true);
+          }}
           className="flex items-center gap-2 px-4 py-2 border rounded bg-white shadow-sm"
         >
           <SlidersHorizontal className="w-4 h-4" />
@@ -28,17 +54,50 @@ export default function RemolqueFiltersMobile({ filtros, setFiltros, onClear }: 
         </button>
       </div>
 
-      {/* Drawer lateral */}
+      {/* Drawer pantalla completa */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex">
-          <div className="w-72 bg-white p-5 shadow-lg overflow-y-auto h-full">
-            <h2 className="text-lg font-bold mb-6">Filtros</h2>
+        <div className="fixed inset-0 z-50 pt-32 bg-white flex flex-col lg:hidden">
+          {/* Header con botón cerrar */}
+          <div className="flex justify-between items-center p-4 border-b">
+            <h2 className="text-lg font-bold">Filtros</h2>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-2 rounded hover:bg-gray-100"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
 
+          {/* Contenido scrollable */}
+          <div className="flex-1 overflow-y-auto px-4 py-4">
+            {/* Ordenación */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-1">
+                Ordenar por
+              </label>
+              <select
+                value={localSort}
+                onChange={(e) => setLocalSort(e.target.value)}
+                className="w-full border rounded p-2"
+              >
+                <option value="">Por defecto</option>
+                <option value="referencia_asc">Referencia (A-Z)</option>
+                <option value="mma_asc">MMA (menor a mayor)</option>
+                <option value="mma_desc">MMA (mayor a menor)</option>
+              </select>
+            </div>
+
+            {/* Filtros */}
             <div className="mb-4">
               <label className="block text-sm font-medium">Familia</label>
               <select
-                value={filtros.familia || ""}
-                onChange={(e) => setFiltros({ ...filtros, familia: e.target.value || undefined })}
+                value={localFiltros.familia || ""}
+                onChange={(e) =>
+                  setLocalFiltros({
+                    ...localFiltros,
+                    familia: e.target.value || undefined,
+                  })
+                }
                 className="w-full mt-1 p-2 border rounded"
               >
                 <option value="">Todas</option>
@@ -55,8 +114,10 @@ export default function RemolqueFiltersMobile({ filtros, setFiltros, onClear }: 
                   <input
                     type="radio"
                     name="mma"
-                    checked={filtros.mma === 750}
-                    onChange={() => setFiltros({ ...filtros, mma: 750 })}
+                    checked={localFiltros.mma === 750}
+                    onChange={() =>
+                      setLocalFiltros({ ...localFiltros, mma: 750 })
+                    }
                     className="mr-2"
                   />
                   Hasta 750 kg
@@ -65,8 +126,10 @@ export default function RemolqueFiltersMobile({ filtros, setFiltros, onClear }: 
                   <input
                     type="radio"
                     name="mma"
-                    checked={filtros.mma === 3500}
-                    onChange={() => setFiltros({ ...filtros, mma: 3500 })}
+                    checked={localFiltros.mma === 3500}
+                    onChange={() =>
+                      setLocalFiltros({ ...localFiltros, mma: 3500 })
+                    }
                     className="mr-2"
                   />
                   Hasta 3500 kg
@@ -77,8 +140,13 @@ export default function RemolqueFiltersMobile({ filtros, setFiltros, onClear }: 
             <div className="mb-4">
               <label className="block text-sm font-medium">Ejes</label>
               <select
-                value={filtros.ejes || ""}
-                onChange={(e) => setFiltros({ ...filtros, ejes: parseInt(e.target.value) || undefined })}
+                value={localFiltros.ejes || ""}
+                onChange={(e) =>
+                  setLocalFiltros({
+                    ...localFiltros,
+                    ejes: parseInt(e.target.value) || undefined,
+                  })
+                }
                 className="w-full mt-1 p-2 border rounded"
               >
                 <option value="">Todos</option>
@@ -86,28 +154,23 @@ export default function RemolqueFiltersMobile({ filtros, setFiltros, onClear }: 
                 <option value="2">2 ejes</option>
               </select>
             </div>
-
-            <div className="flex flex-col gap-2 mt-6">
-              <button
-                onClick={() => {
-                  onClear();
-                  handleClose();
-                }}
-                className="w-full text-sm bg-gray-200 hover:bg-gray-300 py-2 rounded"
-              >
-                Limpiar filtros
-              </button>
-              <button
-                onClick={handleClose}
-                className="w-full text-sm bg-blue-600 text-white py-2 rounded"
-              >
-                Aplicar filtros
-              </button>
-            </div>
           </div>
 
-          {/* Fondo clicable para cerrar */}
-          <div className="flex-1" onClick={handleClose}></div>
+          {/* Footer fijo */}
+          <div className="p-4 border-t bg-white flex gap-2">
+            <button
+              onClick={handleClear}
+              className="flex-1 py-2 text-sm bg-gray-200 hover:bg-gray-300 rounded"
+            >
+              Borrar{numFiltrosActivos > 0 ? ` (${numFiltrosActivos})` : ""}
+            </button>
+            <button
+              onClick={handleApply}
+              className="flex-1 py-2 text-sm bg-blue-600 text-white rounded"
+            >
+              Aplicar
+            </button>
+          </div>
         </div>
       )}
     </>
