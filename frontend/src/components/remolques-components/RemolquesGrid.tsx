@@ -9,7 +9,13 @@ interface Props {
   setPage: (page: number) => void;
 }
 
-export default function RemolquesGrid({ remolques, loading, page, totalPages, setPage }: Props) {
+export default function RemolquesGrid({
+  remolques,
+  loading,
+  page,
+  totalPages,
+  setPage,
+}: Props) {
   if (loading) return <p className="text-center mt-8">Cargando remolques...</p>;
 
   if (!remolques.length) {
@@ -18,19 +24,20 @@ export default function RemolquesGrid({ remolques, loading, page, totalPages, se
 
   return (
     <div className="flex flex-col gap-6 w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+      {/* Grid responsivo (mínimo 2 remolques por fila) */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
         {remolques.map((r) => (
           <RemolqueCard key={r.id} {...r} />
         ))}
       </div>
 
       {/* Paginación */}
-      <div className="flex justify-center gap-2 mt-8">
+      <div className="flex justify-center gap-2 mt-8 flex-wrap">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
             onClick={() => setPage(i + 1)}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-2 rounded text-sm ${
               page === i + 1
                 ? "bg-blue-600 text-white"
                 : "bg-gray-200 text-gray-800 hover:bg-gray-300"
