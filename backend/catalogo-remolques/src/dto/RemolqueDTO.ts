@@ -28,5 +28,6 @@ export interface RemolqueDTO {
     rampas?: boolean
     apoyaTableros?: boolean
     urlModelo3D: string
+    descripcion?: string
   }
   

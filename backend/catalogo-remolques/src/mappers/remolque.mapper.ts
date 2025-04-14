@@ -39,5 +39,6 @@ export function toRemolqueDTO(remolque: Remolque): RemolqueDTO {
       rampas: remolque.rampas,
       apoyaTableros: remolque.apoyaTableros,
       urlModelo3D: remolque.urlModelo3D,
+      descripcion: remolque.descripcion,
     }
   }

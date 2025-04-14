@@ -86,6 +86,10 @@ export class Remolque {
   // URL de la imagen del remolque
   urlImagen?: string;
 
+  @Column({ nullable: true })
+  descripcion?: string;
+
+
   @AfterLoad()
   setCategoria() {
     this.categoria = this.mma <= 750 ? "O1" : "O2";

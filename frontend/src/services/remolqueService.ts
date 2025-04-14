@@ -1,5 +1,5 @@
 import axios from "@/lib/axios";
-import { RemolqueTarjetaDTO } from "@/types/remolque";
+import { RemolqueTarjetaDTO, RemolqueDTO } from "@/types/remolque";
 
 interface QueryParams {
   page?: number;
@@ -23,5 +23,10 @@ export async function getRemolquesTarjeta(
   params?: QueryParams
 ): Promise<PaginatedRemolquesResponse> {
   const { data } = await axios.get<PaginatedRemolquesResponse>("/remolques/tarjetas", { params });
+  return data;
+}
+
+export async function getRemolqueById(id: number): Promise<RemolqueDTO> {
+  const { data } = await axios.get<RemolqueDTO>(`/remolques/${id}`);
   return data;
 }

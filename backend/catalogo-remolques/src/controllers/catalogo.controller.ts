@@ -2,7 +2,7 @@
 import * as catalogoService from '../services/catalogo.service';
 import { remolqueSchema } from '../validators/remolque.validator';
 import { remolqueParcialSchema } from "../validators/remolque.validator";
-import { toRemolqueTarjetaDTO } from '../mappers/remolque.mapper';
+import { toRemolqueTarjetaDTO, toRemolqueDTO } from '../mappers/remolque.mapper';
 
 export const obtenerRemolques = async (_req: Request, res: Response) => {
   const remolques = await catalogoService.obtenerRemolques();
@@ -51,19 +51,19 @@ export const obtenerRemolquePorId = async (req: Request, res: Response, next: Ne
 
     if (isNaN(id)) {
       res.status(400).json({ error: "El ID debe ser un número entero" });
-      return
+      return;
     }
 
     const remolque = await catalogoService.obtenerRemolquePorId(id);
 
     if (!remolque) {
       res.status(404).json({ error: "Remolque no encontrado" });
-      return
+      return;
     }
 
-    res.json(remolque);
+    res.json(toRemolqueDTO(remolque));
   } catch (error) {
-    next(error); // delegamos al errorHandler
+    next(error);
   }
 };
 

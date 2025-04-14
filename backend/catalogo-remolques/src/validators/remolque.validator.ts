@@ -62,6 +62,7 @@ export const remolqueSchema = z.object({
 
   urlModelo3D: z.string(),
   urlImagen: z.string().url().optional(), // URL de la imagen del remolque
+  descripcion: z.string().optional(), // Descripción del remolque
 });
 
 // Tipo TypeScript completo
