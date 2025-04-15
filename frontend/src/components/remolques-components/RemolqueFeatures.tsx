@@ -31,7 +31,7 @@ export default function RemolqueFeatures({ remolque }: Props) {
 
   return (
     <aside className="w-full lg:w-[300px] bg-gray-100 p-6">
-      <h2 className="text-xl font-semibold mb-4">Características</h2>
+      <h2 className="text-xl font-bold mb-4">Características</h2>
       <ul className="text-sm text-gray-800">
         {entries.map(([key, value], idx) => (
           <li

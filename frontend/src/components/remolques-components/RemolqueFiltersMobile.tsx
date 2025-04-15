@@ -1,8 +1,10 @@
+// frontend/src/components/remolques-components/RemolqueFiltersMobile.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiltrosCatalogo } from "@/hooks/useRemolques";
 import { SlidersHorizontal, X } from "lucide-react";
+import { getFamiliesByUso } from "@/services/remolqueService";
 
 interface Props {
   filtros: FiltrosCatalogo;
@@ -10,6 +12,8 @@ interface Props {
   sort: string;
   setSort: (s: string) => void;
   onClear: () => void;
+  families: string[];
+  uses: string[];
 }
 
 export default function RemolqueFiltersMobile({
@@ -18,10 +22,31 @@ export default function RemolqueFiltersMobile({
   sort,
   setSort,
   onClear,
+  families,
+  uses,
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [localFiltros, setLocalFiltros] = useState(filtros);
+
+  // Estados locales
+  const [localFiltros, setLocalFiltros] = useState<FiltrosCatalogo>(filtros);
   const [localSort, setLocalSort] = useState(sort);
+
+  // Famílias filtradas localmente
+  const [filteredFamilies, setFilteredFamilies] = useState<string[]>(families);
+
+  // Cada vez que cambie uso, recargamos el array de familias
+  useEffect(() => {
+    if (!localFiltros.uso) {
+      setFilteredFamilies(families);
+    } else {
+      getFamiliesByUso(localFiltros.uso)
+        .then((res) => setFilteredFamilies(res))
+        .catch((err) => {
+          console.error("Error al cargar familias por uso:", err);
+          setFilteredFamilies([]);
+        });
+    }
+  }, [localFiltros.uso, families]);
 
   const numFiltrosActivos = Object.values(localFiltros).filter(Boolean).length;
 
@@ -87,11 +112,33 @@ export default function RemolqueFiltersMobile({
               </select>
             </div>
 
-            {/* Filtros */}
+            {/* Filtro de Uso */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium">Uso</label>
+              <select
+                value={localFiltros.uso ?? ""}
+                onChange={(e) =>
+                  setLocalFiltros({
+                    ...localFiltros,
+                    uso: e.target.value || undefined,
+                  })
+                }
+                className="w-full mt-1 p-2 border rounded"
+              >
+                <option value="">Todos</option>
+                {uses.map((uso) => (
+                  <option key={uso} value={uso}>
+                    {uso}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Filtro de Familia */}
             <div className="mb-4">
               <label className="block text-sm font-medium">Familia</label>
               <select
-                value={localFiltros.familia || ""}
+                value={localFiltros.familia ?? ""}
                 onChange={(e) =>
                   setLocalFiltros({
                     ...localFiltros,
@@ -101,12 +148,15 @@ export default function RemolqueFiltersMobile({
                 className="w-full mt-1 p-2 border rounded"
               >
                 <option value="">Todas</option>
-                <option value="Portacoches">Portacoches</option>
-                <option value="Ganadero">Ganadero</option>
-                <option value="Basculante">Basculante</option>
+                {filteredFamilies.map((fam) => (
+                  <option key={fam} value={fam}>
+                    {fam}
+                  </option>
+                ))}
               </select>
             </div>
 
+            {/* Filtro de MMA */}
             <div className="mb-4">
               <label className="block text-sm font-medium">MMA</label>
               <div className="flex flex-col gap-1 mt-1">
@@ -137,14 +187,15 @@ export default function RemolqueFiltersMobile({
               </div>
             </div>
 
+            {/* Filtro de Ejes */}
             <div className="mb-4">
               <label className="block text-sm font-medium">Ejes</label>
               <select
-                value={localFiltros.ejes || ""}
+                value={localFiltros.ejes ?? ""}
                 onChange={(e) =>
                   setLocalFiltros({
                     ...localFiltros,
-                    ejes: parseInt(e.target.value) || undefined,
+                    ejes: e.target.value ? parseInt(e.target.value) : undefined,
                   })
                 }
                 className="w-full mt-1 p-2 border rounded"

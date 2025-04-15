@@ -3,6 +3,7 @@
 // y asegurar que los datos son correctos antes de guardarlos en la base de datos.
 
 import { z } from 'zod';
+import { FAMILIAS } from "../utils/familiasUsosRemolques";
 import {
   Dimensiones,
   Ejes,
@@ -14,7 +15,7 @@ import { url } from 'inspector';
 
 // Esquema completo para creación de remolques
 export const remolqueSchema = z.object({
-  familia: z.string(),
+  familia: z.enum(FAMILIAS),
   referencia: z.string(),
 
   dimensiones: z.object({

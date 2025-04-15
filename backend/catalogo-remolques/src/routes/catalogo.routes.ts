@@ -12,8 +12,9 @@ router.delete('/remolques/:id', catalogoController.eliminarRemolquePorId);
 router.put('/remolques/:id', catalogoController.actualizarRemolquePorId);
 router.patch('/remolques/:id', catalogoController.modificarParcialmenteRemolque);
 
-
-
+router.get("/familias", catalogoController.obtenerFamilias);
+router.get("/usos", catalogoController.obtenerUsos);
+router.get("/usos/:uso/familias", catalogoController.obtenerFamiliasPorUso);
 
 
 export default router;
