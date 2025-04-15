@@ -12,6 +12,13 @@
   }
 }
 
+@layer utilities {
+  .animate-spin-slow {
+    animation: spin 4s linear infinite;
+  }
+}
+
+
 .animate-bounce-x {
   animation: bounce-x 2.4s ease-in-out infinite;
 }
