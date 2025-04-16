@@ -68,13 +68,13 @@ export default function RemolquesSlider() {
         <Carousel
           responsive={responsive}
           infinite
+          autoPlay  // Activa el auto sliding
+          autoPlaySpeed={3000} // Configura el intervalo en milisegundos (3000 ms = 3 segundos)
           arrows={false}
           renderButtonGroupOutside
           customButtonGroup={<CustomButtonGroup />}
-          itemClass="px-4" // margen entre tarjetas
-          containerClass="pb-4"
-          centerMode
-          partialVisible={false}
+          itemClass="px-2 transform scale-90" // Escala la tarjeta al 90% (ajusta este valor según prefieras)
+          containerClass="pb-4 pt-3"
         >
           {remolques.map((remolque) => (
             <RemolqueCard key={remolque.id} {...remolque} />

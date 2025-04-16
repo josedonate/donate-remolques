@@ -42,8 +42,9 @@ export default function RemolqueIntro() {
         </h1>
       )}
 
-      <Canvas camera={{ position: [8, 2, 5], fov: 40 }}>
+      <Canvas shadows camera={{ position: [8, 2, 5], fov: 40 }}>
         <ambientLight intensity={0.6} />
+        <directionalLight castShadow position={[10, 10, 5]} intensity={1.5} />
         <Suspense fallback={null}>
           <RemolqueModel onLoad={() => setModeloCargado(true)} />
           <Environment preset="sunset" />

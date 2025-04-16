@@ -47,7 +47,7 @@ export function useRemolquesCatalogo() {
 
     getRemolquesTarjeta({
       page,
-      limit: 8,
+      limit: 9,
       ...filtros,
       sort: sortParam,
       direction,
