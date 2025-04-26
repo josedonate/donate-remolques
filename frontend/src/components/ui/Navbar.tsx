@@ -23,7 +23,7 @@ export default function Navbar() {
           <Image 
             src="/donate_logo_web.png"
             alt="Logo Donate"
-            width={250}
+            width={200}
             height={48}
             priority
           />

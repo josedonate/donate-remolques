@@ -10,7 +10,7 @@ export default function HomePage() {
     <div className="space-y-12 py-12">
       {/* Componente para mostrar el remolque 3D */}
       <RemolqueIntro />
-      {/* Banner de bienvenida */}
+      
       <section className="mt-0 flex flex-col items-center gap-10">
         <SectionTag
           title="Remolques"

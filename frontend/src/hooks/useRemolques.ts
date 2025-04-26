@@ -9,11 +9,12 @@ export interface FiltrosCatalogo {
   uso?: string;
 }
 
-export function useRemolques() {
+// Hook para cargar remolques en la página principal
+export function useRemolques() { 
   const [remolques, setRemolques] = useState<RemolqueTarjetaDTO[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(() => { // Se muestran en el slider de la página principal solo 8 remolques
     getRemolquesTarjeta({ page: 1, limit: 8 })
       .then((res) => {
         setRemolques(res.content);

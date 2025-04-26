@@ -47,9 +47,9 @@ export default function CatalogoRemolquesPage() {
   };
 
   return (
-    <main className="min-h-screen px-4 pt-12">
+    <main className="min-h-screen px-4 pt-8">
       {/* Sticky header (desktop) */}
-      <div className="hidden lg:flex justify-between items-center sticky top-[122px] bg-white z-20 py-4 max-w-screen-xl mx-auto border-b">
+      <div className="hidden lg:flex justify-between items-center sticky top-[106px] bg-white z-20 py-4 max-w-screen-xl mx-auto border-b">
         <h1 className="text-2xl font-bold">Catálogo de Remolques</h1>
         <div className="flex gap-3">
           <button
@@ -65,7 +65,7 @@ export default function CatalogoRemolquesPage() {
       </div>
 
       {/* Top bar móvil */}
-      <div className="lg:hidden sticky top-[120px] z-20 bg-white border-b py-4 flex justify-between items-center max-w-screen-xl mx-auto">
+      <div className="lg:hidden sticky top-[106px] z-20 bg-white border-b py-4 flex justify-between items-center max-w-screen-xl mx-auto">
         <h1
           className="font-bold whitespace-nowrap"
           style={{ fontSize: "clamp(1rem, 5vw, 1.25rem)" }}
