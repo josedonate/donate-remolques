@@ -1,84 +1,59 @@
 // src/config/passport.ts
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as JwtStrategy, ExtractJwt, StrategyOptions } from 'passport-jwt';
-import dotenv from 'dotenv';
-import { AppDataSource } from './database';
-import { User } from '../models/User';
-import { verifyPassword } from '../utils/password.util';
-import { JwtPayload } from '../utils/jwt.util';
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import { getUserByEmail, getUserById } from '@/services/auth.service';
+import { verifyPassword } from '@/utils/password.util';
+import { JwtPayload } from '@/utils/jwt.util';
 
-dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
 
-// Local Strategy: login con email y contraseña
+// Local Strategy para login con email y password
 passport.use(
   new LocalStrategy(
     {
-      usernameField: 'email',     // campo que enviamos en el body
+      usernameField: 'email',
       passwordField: 'password',
-      session: false,
     },
     async (email, password, done) => {
       try {
-        const repo = AppDataSource.getRepository(User);
-        const user = await repo.findOneBy({ email });
+        const user = await getUserByEmail(email);
         if (!user) {
-          return done(null, false, { message: 'Usuario no encontrado' });
+          return done(null, false, { message: 'Email no registrado' });
         }
+
         const isValid = await verifyPassword(password, user.passwordHash);
         if (!isValid) {
           return done(null, false, { message: 'Contraseña incorrecta' });
         }
-        // omitimos el hash al adjuntar user
-        delete (user as any).passwordHash;
+
         return done(null, user);
-      } catch (err) {
-        return done(err);
+      } catch (error) {
+        return done(error);
       }
     }
   )
 );
 
-// JWT Strategy: proteger rutas privadas
-const jwtOptions: StrategyOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET || 'supersecret',
-  passReqToCallback: false,
-};
-
+// JWT Strategy para proteger rutas
 passport.use(
-  new JwtStrategy(jwtOptions, async (payload: JwtPayload, done) => {
-    try {
-      const repo = AppDataSource.getRepository(User);
-      const user = await repo.findOneBy({ id: payload.sub });
-      if (!user) {
-        return done(null, false, { message: 'Token inválido' });
+  new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: JWT_SECRET,
+    },
+    async (payload: JwtPayload, done) => {
+      try {
+        const user = await getUserById(payload.sub);
+        if (!user) {
+          return done(null, false, { message: 'Usuario no encontrado' });
+        }
+        return done(null, user);
+      } catch (error) {
+        return done(error);
       }
-      delete (user as any).passwordHash;
-      return done(null, user);
-    } catch (err) {
-      return done(err, false);
     }
-  })
+  )
 );
-
-// Serializar y deserializar (no usamos sessions, pero Passport lo requiere)
-passport.serializeUser((user: any, done) => {
-  done(null, user.id);
-});
-passport.deserializeUser(async (id: number, done) => {
-  try {
-    const repo = AppDataSource.getRepository(User);
-    const user = await repo.findOneBy({ id });
-    if (user) {
-      delete (user as any).passwordHash;
-      done(null, user);
-    } else {
-      done(null, false);
-    }
-  } catch (err) {
-    done(err, false);
-  }
-});
 
 export default passport;

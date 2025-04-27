@@ -1,8 +1,8 @@
-// src/controllers/auth.controller.ts
 import { Request, Response, NextFunction } from 'express';
 import { registerUserSchema, loginUserSchema } from '@/validators/user.validator';
 import { getUserByEmail, createUser } from '@/services/auth.service';
-import { hashPassword, verifyPassword } from '@/utils/password.util';
+import passport from 'passport';
+import { hashPassword } from '@/utils/password.util';
 import { generateToken, JwtPayload } from '@/utils/jwt.util';
 
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -30,23 +30,13 @@ export const register = async (req: Request, res: Response, next: NextFunction):
   }
 };
 
-export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  try {
-    const validatedData = loginUserSchema.parse(req.body);
-
-    const user = await getUserByEmail(validatedData.email);
-    if (!user) {
-      res.status(401).json({ message: 'Correo o contraseña incorrectos' });
-      return;
+export const login = (req: Request, res: Response, next: NextFunction): void => {
+  passport.authenticate('local', { session: false }, (err: any, user: any, info: any)  => {
+    if (err) {
+      return next(err);
     }
-
-    const isPasswordValid = await verifyPassword(
-      validatedData.password,
-      user.passwordHash
-    );
-    if (!isPasswordValid) {
-      res.status(401).json({ message: 'Correo o contraseña incorrectos' });
-      return;
+    if (!user) {
+      return res.status(401).json({ message: info?.message || 'Credenciales incorrectos' });
     }
 
     const payload: JwtPayload = { // Claims del token
@@ -61,7 +51,7 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
       message: 'Inicio de sesión exitoso',
       token,
     });
-  } catch (error) {
-    next(error);
-  }
+  })(req, res, next);
 };
+
+
