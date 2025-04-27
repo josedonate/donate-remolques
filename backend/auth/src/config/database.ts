@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
 import { User } from '../models/User';
+import { RefreshToken } from '@/models/RefreshToken';
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
   schema: process.env.DB_SCHEMA,
   synchronize: true,      // En producción mantener en false
   logging: false,
-  entities: [User],        // Añadir aquí más entidades si hace falta
+  entities: [User, RefreshToken],        // Añadir aquí más entidades si hace falta
   migrations: ['src/migrations/**/*.ts'],
   subscribers: [],
 });
