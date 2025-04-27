@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
-import { User } from '../models/user.entity';
+import { User } from '../models/User';
 
 dotenv.config();
 
@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   schema: process.env.DB_SCHEMA,
-  synchronize: false,      // En producción mantener en false
+  synchronize: true,      // En producción mantener en false
   logging: false,
   entities: [User],        // Añadir aquí más entidades si hace falta
   migrations: ['src/migrations/**/*.ts'],

@@ -12,7 +12,8 @@
     "passport-local": "^1.0.0",
     "pg": "^8.15.6",
     "reflect-metadata": "^0.2.2",
-    "typeorm": "^0.3.22"
+    "typeorm": "^0.3.22",
+    "zod": "^3.24.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -32,10 +33,11 @@
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "dev": "ts-node-dev --respawn --require tsconfig-paths/register src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
   }

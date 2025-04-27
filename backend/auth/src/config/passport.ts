@@ -4,7 +4,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt, StrategyOptions } from 'passport-jwt';
 import dotenv from 'dotenv';
 import { AppDataSource } from './database';
-import { User } from '../models/user.entity';
+import { User } from '../models/User';
 import { verifyPassword } from '../utils/password.util';
 import { JwtPayload } from '../utils/jwt.util';
 
