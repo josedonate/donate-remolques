@@ -9,6 +9,7 @@ import SortDropdown from "@/components/remolques-components/SortDropdown";
 import RemolquesGrid from "@/components/remolques-components/RemolquesGrid";
 import { SlidersHorizontal } from "lucide-react";
 
+
 export default function CatalogoRemolquesPage() {
   const {
     remolques,

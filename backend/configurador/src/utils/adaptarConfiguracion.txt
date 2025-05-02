@@ -1,0 +1,101 @@
+// validators/adaptarConfiguracion.ts
+import { ConfiguracionEntradaDTO } from '../dto/configuracionEntrada.dto';
+import { ConfiguracionRespuestaDTO } from '../dto/configuracionRespuesta.dto';
+import { TARIFA_COMPONENTES } from '../tarifas/tarifas';
+import { DIMENSIONES_DISPONIBLES } from '../data/dimensiones';
+import {opcionesValidasRespuestaDTO} from '../dto/configuracionRespuesta.dto';
+
+interface ResultadoAdaptacion {
+  configuracionAdaptada: ConfiguracionEntradaDTO;
+  opcionesValidas: opcionesValidasRespuestaDTO;
+}
+
+const MMA_POSIBLES = [300, 500, 650, 750, 1000, 1300, 1600, 2000, 2500, 3000, 3500];
+const KG_POR_EJE_DISPONIBLES = [300, 500, 650, 750, 900, 1000, 1300, 1600, 1800];
+
+export const adaptarYValidarConfiguracion = (
+  config: ConfiguracionEntradaDTO
+): ResultadoAdaptacion => {
+  const opcionesValidas: ResultadoAdaptacion['opcionesValidas'] = {};
+  const adaptada = {
+    ...config,
+    dimensiones: { ...config.dimensiones },
+    ruedas: { ...config.ruedas }
+  };
+
+  const { largo, ancho } = adaptada.dimensiones;
+  const mma = adaptada.mma;
+
+  // Tipo de remolque
+  opcionesValidas.tipo = ['normal', 'basculante'];
+
+  // Alto calculado por largo
+  opcionesValidas.alto = largo < 300 ? [30, 40] : [40, 50];
+
+  // Número de ejes según largo
+  if (largo < 225) {
+    adaptada.numeroEjes = 1;
+    opcionesValidas.numeroEjes = [1];
+  } else if (largo > 250) {
+    adaptada.numeroEjes = 2;
+    opcionesValidas.numeroEjes = [2];
+  } else {
+    opcionesValidas.numeroEjes = [1, 2];
+  }
+
+  // Freno según MMA
+  if (mma > 750) {
+    adaptada.freno = true;
+    opcionesValidas.freno = [true];
+  } else {
+    opcionesValidas.freno = [true, false];
+  }
+
+  // MMA válidas según ejes
+  const mmaValidas = MMA_POSIBLES.filter(val =>
+    val <= 750 || adaptada.numeroEjes === 2
+  );
+  opcionesValidas.mma = mmaValidas;
+  if (!mmaValidas.includes(mma)) {
+    adaptada.mma = mmaValidas[0];
+  }
+
+  // kgPorEje
+  const minKgPorEje = adaptada.numeroEjes === 1
+    ? adaptada.mma
+    : Math.ceil(adaptada.mma / 2);
+  const kgValidos = KG_POR_EJE_DISPONIBLES.filter(val => val >= minKgPorEje);
+  opcionesValidas.kgPorEje = kgValidos;
+  if (!kgValidos.includes(adaptada.kgPorEje)) {
+    adaptada.kgPorEje = kgValidos[0];
+  }
+
+  // Luces
+  opcionesValidas.luces = Object.keys(TARIFA_COMPONENTES.luces) as ('estandar' | 'led')[];
+
+  // Ruedas
+  opcionesValidas.ruedas = {
+    pulgadasLlanta: Object.keys(TARIFA_COMPONENTES.ruedas),
+    localizacionRuedas: ['porfuera', 'pordebajo']
+  };
+  if (adaptada.ruedas.localizacionRuedas === 'pordebajo' && ancho < 140) {
+    adaptada.ruedas.localizacionRuedas = 'porfuera';
+  }
+  if (adaptada.ruedas.localizacionRuedas === 'porfuera' && ancho > 180) {
+    adaptada.ruedas.localizacionRuedas = 'pordebajo';
+  }
+
+  // Opcionales
+  opcionesValidas.opcionales = {
+    sobrelaterales: Object.keys(TARIFA_COMPONENTES.opcionales.sobrelaterales) as ('rejilla' | 'chapa')[],
+    toldo: [true, false],
+    apoyatableros: [true, false],
+    tapadera: [true, false],
+    rampas: [true, false]
+  };
+
+  return {
+    configuracionAdaptada: adaptada,
+    opcionesValidas
+  };
+};

@@ -1,48 +1,27 @@
-import { Request, Response } from 'express';
-import { configuracionSchema } from '../validators/configuracionSchema';
-import { validarConfiguracionRemolque } from '../validators/reglasRemolque';
-import { obtenerModelo3D } from '../utils/modelo3D';
-import { calcularPrecioRemolque } from '../services/calculoPrecio.service';
+// backend/configurador/src/controllers/configurador.controller.ts
 
-export const procesarConfiguracion = async (req: Request, res: Response) => {
+import { Request, Response, Router } from 'express';
+import { procesarConfiguracion } from '../services/validacionConfiguracion.service';
+import { ConfiguracionEntradaDTO } from '../dto/configuracionEntrada.dto';
+import { CONFIGURACION_PREDETERMINADA } from '../data/RemolquePredeterminado';
+
+export const getConfiguracionInicial = (req: Request, res: Response) => {
   try {
-    // 🧪 Validación de formato
-    const parsed = configuracionSchema.safeParse(req.body);
+    const respuesta = procesarConfiguracion(CONFIGURACION_PREDETERMINADA);
+    res.json(respuesta);
+  } catch (err) {
+    console.error('Error al generar configuración inicial:', err);
+    res.status(500).json({ error: 'Error al generar configuración inicial' });
+  }
+};
 
-    if (!parsed.success) {
-      res.status(400).json({
-        message: 'Error de validación de formato',
-        issues: parsed.error.errors
-      });
-      return;
-    }
-
-    const configuracion = parsed.data;
-
-    // 📏 Validación de reglas de negocio
-    const resultadoValidacion = validarConfiguracionRemolque(configuracion);
-
-    // 🧱 Selección de modelo 3D
-    const modelo3D = resultadoValidacion.configuracionValida
-      ? obtenerModelo3D(configuracion)
-      : null;
-
-    // 💰 Cálculo de precio y peso estimado
-    const { precioTotal, pesoEstimadoKg } = resultadoValidacion.configuracionValida
-      ? calcularPrecioRemolque(configuracion)
-      : { precioTotal: 0, pesoEstimadoKg: 0 };
-
-    // 📦 Respuesta completa
-    res.status(200).json({
-      ...resultadoValidacion,
-      modelo3D,
-      precioTotal,
-      pesoEstimadoKg
-    });
-    return;
-  } catch (error) {
-    console.error('Error en el controlador:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-    return;
+export const postConfiguracion = (req: Request, res: Response) => {
+  try {
+    const configuracionUsuario = req.body as ConfiguracionEntradaDTO;
+    const respuesta = procesarConfiguracion(configuracionUsuario);
+    res.json(respuesta);
+  } catch (err) {
+    console.error('Error al procesar configuración:', err);
+    res.status(400).json({ error: 'Configuración inválida o incoherente' });
   }
 };

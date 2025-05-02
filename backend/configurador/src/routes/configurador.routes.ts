@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { procesarConfiguracion } from '../controllers/configurador.controller';
+import { getConfiguracionInicial, postConfiguracion } from '../controllers/configurador.controller';
 
 const router = Router();
 
-router.post('/', procesarConfiguracion);
+router.get('/configurador', getConfiguracionInicial);
+router.post('/configurador', postConfiguracion);
 
 export default router;

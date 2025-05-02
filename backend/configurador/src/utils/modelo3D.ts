@@ -4,11 +4,11 @@ export const obtenerModelo3D = (config: ConfiguracionEntradaDTO): 'alfa' | 'delt
   const { numeroEjes, ruedas } = config;
 
   if (numeroEjes === 1) {
-    return ruedas.localizacionRuedas === 'porFuera' ? 'alfa' : 'delta';
+    return ruedas.localizacionRuedas === 'porfuera' ? 'alfa' : 'delta';
   }
 
   if (numeroEjes === 2) {
-    return ruedas.localizacionRuedas === 'porFuera' ? 'discovery' : 'explorer';
+    return ruedas.localizacionRuedas === 'porfuera' ? 'discovery' : 'explorer';
   }
 
   return null;
