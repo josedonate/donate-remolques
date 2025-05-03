@@ -50,8 +50,8 @@ export const calcularPrecioRemolque = (
 };
 
 const estimarPeso = (config: ConfiguracionEntradaDTO): number => {
-  const { dimensiones, numeroEjes } = config;
-  const { ancho, largo, alto } = dimensiones;
+  const { dimensiones, alto, numeroEjes } = config;
+  const { ancho, largo } = dimensiones;
 
   // 📦 Peso de la caja (aluminio 2mm de grosor)
   const grosor = 0.2; // cm

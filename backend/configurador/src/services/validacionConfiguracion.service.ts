@@ -6,6 +6,7 @@ import { obtenerModelo3D } from '../utils/modelo3D';
 import { calcularPrecioRemolque } from './calculoPrecio.service';
 import { configuracionSchema } from '../validators/configuracionSchema';
 import { TARIFA_COMPONENTES } from '../tarifas/tarifas';
+import { DIMENSIONES_DISPONIBLES } from '../data/dimensiones';
 
 const MMA_POSIBLES = [300, 500, 650, 750, 1000, 1300, 1600, 2000, 2500, 3000, 3500];
 const KG_POR_EJE_DISPONIBLES = [300, 500, 650, 750, 900, 1000, 1300, 1600, 1800];
@@ -114,8 +115,11 @@ const generarOpcionesValidas = (config: ConfiguracionEntradaDTO): opcionesValida
     rampas: [true, false]
   };
 
+  const dimensiones = DIMENSIONES_DISPONIBLES; // Siempre se mandan todas las dimensiones disponibles
+
   return {
     tipo,
+    dimensiones,
     alto,
     mma,
     numeroEjes,

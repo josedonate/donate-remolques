@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosConfigurador = axios.create({
-  baseURL: 'http://localhost:3003/configurador',
+  baseURL: 'http://localhost:3003/api',
   headers: {
     'Content-Type': 'application/json',
   },

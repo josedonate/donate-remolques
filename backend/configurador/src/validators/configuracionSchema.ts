@@ -6,8 +6,8 @@ export const configuracionSchema = z.object({
   dimensiones: z.object({
     ancho: z.number().int().positive(),
     largo: z.number().int().positive(),
-    alto: z.number().int().positive()
   }),
+  alto: z.number().int().positive(),
 
   mma: z.number().int().positive(),
 

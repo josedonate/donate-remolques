@@ -1,10 +1,11 @@
-import { ConfiguracionEntradaDTO } from "./configuracionEntrada.dto";
-import {DimensionDisponible} from "../data/dimensiones";
+import { ConfiguracionFormulario } from "./configuracionFormulario";
 
 export interface opcionesValidasRespuestaDTO {
-
   tipo: ("normal" | "basculante")[];
-  dimensiones: DimensionDisponible[]; // dimensiones: { ancho: number; largo: number }[];
+  dimensiones: {
+    ancho: number;
+    largo: number;
+  }[];
   alto: number[];
   mma: number[];
   numeroEjes: (1 | 2)[];
@@ -26,7 +27,7 @@ export interface opcionesValidasRespuestaDTO {
 
 export interface ConfiguracionRespuestaDTO {
   opcionesValidas: opcionesValidasRespuestaDTO;
-  configuracionAdaptada: ConfiguracionEntradaDTO;
+  configuracionAdaptada: ConfiguracionFormulario;
   precioTotal: number;
   pesoEstimadoKg: number;
   modelo: string; // Nombre del modelo de remolque 3D a mostrar en el frontend

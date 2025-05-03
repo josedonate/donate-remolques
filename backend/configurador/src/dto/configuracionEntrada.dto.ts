@@ -1,6 +1,7 @@
 export interface ConfiguracionEntradaDTO {
   tipo: 'normal' | 'basculante';
-  dimensiones: { ancho: number; largo: number; alto: number };
+  dimensiones: { ancho: number; largo: number };
+  alto: number;
   mma: number;
   numeroEjes: 1 | 2;
   kgPorEje: number;

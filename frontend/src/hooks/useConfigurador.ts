@@ -1,39 +1,50 @@
-// src/hooks/useConfigurador.ts
-import { useState, useEffect } from 'react';
-import axios from '@/lib/axiosConfigurador';
-import { CONFIGURACION_INICIAL } from '@/data/configuracionInicial';
-import { ConfiguradorResponse } from '@/types/ConfiguradorResponse';
+import { useState } from 'react';
+import { ConfiguracionFormulario } from '@/types/configuracionFormulario';
+import { opcionesValidasRespuestaDTO } from '@/types/configuracionRespuesta.dto';
+import { obtenerConfiguracionInicial, enviarConfiguracion } from '@/services/configuradorService';
 
 export const useConfigurador = () => {
-  const [configuracion, setConfiguracion] = useState(CONFIGURACION_INICIAL);
-  const [opciones, setOpciones] = useState({});
-  const [modelo3D, setModelo3D] = useState<string | null>(null);
-  const [precio, setPrecio] = useState(0);
-  const [peso, setPeso] = useState(0);
+  const [configuracion, setConfiguracion] = useState<ConfiguracionFormulario | null>(null);
+  const [opcionesValidas, setOpcionesValidas] = useState<opcionesValidasRespuestaDTO | null>(null);
+  const [precio, setPrecio] = useState<number>(0);
+  const [pesoKg, setPesoKg] = useState<number>(0);
+  const [modelo, setModelo] = useState<string>('');
 
-  const fetchConfiguracion = async (nuevaConfig = configuracion) => {
+  const inicializarConfiguracion = async () => {
     try {
-      const res = await axios.post<ConfiguradorResponse>('/', nuevaConfig);
-      setConfiguracion(res.data.configuracionAdaptada);
-      setOpciones(res.data.opcionesValidas);
-      setModelo3D(res.data.modelo3D);
-      setPrecio(res.data.precioTotal);
-      setPeso(res.data.pesoEstimadoKg);
-    } catch (err) {
-      console.error('Error al obtener configuración:', err);
+      const respuesta = await obtenerConfiguracionInicial();
+      setConfiguracion(respuesta.configuracionAdaptada);
+      setOpcionesValidas(respuesta.opcionesValidas);
+      setPrecio(respuesta.precioTotal);
+      setPesoKg(respuesta.pesoEstimadoKg);
+      setModelo(respuesta.modelo);
+    } catch (error) {
+      console.error('Error al cargar la configuración inicial:', error);
     }
   };
 
-  useEffect(() => {
-    fetchConfiguracion(CONFIGURACION_INICIAL);
-  }, []);
+  const actualizarConfiguracion = async (nueva: ConfiguracionFormulario) => {
+    try {
+      const respuesta = await enviarConfiguracion(nueva);
+      if (JSON.stringify(respuesta.configuracionAdaptada) !== JSON.stringify(configuracion)) {
+        setConfiguracion(respuesta.configuracionAdaptada);
+        setOpcionesValidas(respuesta.opcionesValidas);
+        setPrecio(respuesta.precioTotal);
+        setPesoKg(respuesta.pesoEstimadoKg);
+        setModelo(respuesta.modelo);
+      }
+    } catch (error) {
+      console.error('Error al actualizar configuración:', error);
+    }
+  };
 
   return {
     configuracion,
-    opciones,
-    modelo3D,
+    opcionesValidas,
     precio,
-    peso,
-    actualizarConfiguracion: fetchConfiguracion
+    pesoKg,
+    modelo,
+    inicializarConfiguracion,
+    actualizarConfiguracion,
   };
 };

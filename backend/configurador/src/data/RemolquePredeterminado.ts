@@ -5,8 +5,8 @@ export const CONFIGURACION_PREDETERMINADA: ConfiguracionEntradaDTO = {
   dimensiones: {
     ancho: 140,
     largo: 250,
-    alto: 40
   },
+  alto: 40,
   tipo: 'normal',
   mma: 750,
   numeroEjes: 1,
