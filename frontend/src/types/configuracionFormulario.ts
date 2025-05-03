@@ -11,7 +11,7 @@ export interface ConfiguracionFormulario {
   freno: boolean;
   ruedas: {
     pulgadasLlanta: string;
-    numeracionNeumatico: string;
+    //numeracionNeumatico: string;
     localizacionRuedas: "porfuera" | "pordebajo";
   };
   sistemaBasculante?: "manual" | "electrico";

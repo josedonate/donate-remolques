@@ -14,65 +14,47 @@ interface DimensionesFieldProps {
 }
 
 const DimensionesField: React.FC<DimensionesFieldProps> = ({ value, opciones, onChange }) => {
-  const handleChange = (campo: 'ancho' | 'largo' | 'alto', nuevoValor: number) => {
-    const nuevaConfig = {
-      ancho: value.ancho,
-      largo: value.largo,
-      alto: value.alto,
-      [campo]: nuevoValor,
-    };
-
-    onChange(nuevaConfig);
+  const handleComboChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const [ancho, largo] = e.target.value.split('x').map(Number);
+    onChange({ ...value, ancho, largo });
   };
 
-  const dimensionesUnicas = opciones.dimensiones.filter(
-    (dim, index, self) =>
-      self.findIndex((d) => d.ancho === dim.ancho && d.largo === dim.largo) === index
-  );
+  const handleAltoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onChange({ ...value, alto: parseInt(e.target.value) });
+  };
+
+  const selectedKey = `${value.ancho}x${value.largo}`;
 
   return (
     <div className="space-y-2">
       <h2 className="text-lg font-semibold">Dimensiones</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Ancho */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Combo Ancho x Largo */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Ancho (cm)</label>
+          <label className="block text-sm font-medium text-gray-700">Ancho x Largo</label>
           <select
-            value={value.ancho}
-            onChange={(e) => handleChange('ancho', parseInt(e.target.value))}
+            value={selectedKey}
+            onChange={handleComboChange}
             className="w-full border px-3 py-2 rounded"
           >
-            {[...new Set(dimensionesUnicas.map((d) => d.ancho))].map((ancho) => (
-              <option key={ancho} value={ancho}>
-                {ancho} cm
-              </option>
-            ))}
+            {opciones.dimensiones.map(({ ancho, largo }) => {
+              const key = `${ancho}x${largo}`;
+              return (
+                <option key={key} value={key}>
+                  {ancho}cm x {largo}cm
+                </option>
+              );
+            })}
           </select>
         </div>
 
-        {/* Largo */}
+        {/* Alto separado */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Largo (cm)</label>
-          <select
-            value={value.largo}
-            onChange={(e) => handleChange('largo', parseInt(e.target.value))}
-            className="w-full border px-3 py-2 rounded"
-          >
-            {[...new Set(dimensionesUnicas.map((d) => d.largo))].map((largo) => (
-              <option key={largo} value={largo}>
-                {largo} cm
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Alto */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Altura (cm)</label>
+          <label className="block text-sm font-medium text-gray-700">Alto (cm)</label>
           <select
             value={value.alto}
-            onChange={(e) => handleChange('alto', parseInt(e.target.value))}
+            onChange={handleAltoChange}
             className="w-full border px-3 py-2 rounded"
           >
             {opciones.alto.map((alto) => (

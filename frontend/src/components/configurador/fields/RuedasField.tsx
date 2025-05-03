@@ -3,17 +3,17 @@ import React from 'react';
 interface RuedasFieldProps {
   value: {
     pulgadasLlanta: string;
-    numeracionNeumatico: string;
+    //numeracionNeumatico: string;
     localizacionRuedas: 'porfuera' | 'pordebajo';
   };
   opciones: {
     pulgadasLlanta: string[];
-    numeracionNeumatico: string[]; // <- este campo no está en el DTO de opciones, pero lo dejamos preparado
+    //numeracionNeumatico: string[]; // <- este campo no está en el DTO de opciones, pero lo dejamos preparado
     localizacionRuedas: ('porfuera' | 'pordebajo')[];
   };
   onChange: (nuevoValor: {
     pulgadasLlanta: string;
-    numeracionNeumatico: string;
+    //numeracionNeumatico: string;
     localizacionRuedas: 'porfuera' | 'pordebajo';
   }) => void;
 }
@@ -43,7 +43,7 @@ const RuedasField: React.FC<RuedasFieldProps> = ({ value, opciones, onChange }) 
           </select>
         </div>
 
-        <div>
+        {/*<div>
           <label className="block text-sm font-medium text-gray-700">Neumático</label>
           <input
             type="text"
@@ -52,7 +52,7 @@ const RuedasField: React.FC<RuedasFieldProps> = ({ value, opciones, onChange }) 
             placeholder="Ej: 155/80"
             className="w-full border px-3 py-2 rounded"
           />
-        </div>
+        </div>*/}
 
         <div>
           <label className="block text-sm font-medium text-gray-700">Localización de ruedas</label>
