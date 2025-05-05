@@ -3,8 +3,8 @@ import { ConfiguracionFormulario } from "./configuracionFormulario";
 export interface opcionesValidasRespuestaDTO {
   tipo: ("normal" | "basculante")[];
   dimensiones: {
-    ancho: number;
     largo: number;
+    ancho: number;
   }[];
   alto: number[];
   mma: number[];

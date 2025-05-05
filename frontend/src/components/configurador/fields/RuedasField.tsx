@@ -27,7 +27,7 @@ const RuedasField: React.FC<RuedasFieldProps> = ({ value, opciones, onChange }) 
     <div className="space-y-2">
       <h2 className="text-lg font-semibold">Ruedas</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">Pulgadas de llanta</label>
           <select

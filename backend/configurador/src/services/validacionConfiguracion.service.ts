@@ -47,6 +47,7 @@ const corregirConfiguracion = (entrada: ConfiguracionEntradaDTO): ConfiguracionE
 
   // MMA vs freno
   if (nueva.mma > 750) nueva.freno = true;
+  if (nueva.numeroEjes === 2) nueva.freno = true;
 
   // Ancho mínimo
   const minAncho = categoria === 'O1' ? 100 : 140;
@@ -71,23 +72,20 @@ const generarOpcionesValidas = (config: ConfiguracionEntradaDTO): opcionesValida
   const { largo, ancho } = config.dimensiones;
   const categoria = obtenerCategoriaMMA(config.mma); // O1 u O2
 
-  // MMA válidas
-  const mma = MMA_POSIBLES.filter(m =>
-    categoria === 'O1'
-      ? m <= 750 && ancho >= 100
-      : m > 750 && ancho >= 140
-  );
-
   // Ejes
   let numeroEjes: (1 | 2)[] = [];
   if (largo < 225) numeroEjes = [1];
   else if (largo <= 250) numeroEjes = [1, 2];
   else numeroEjes = [2];
 
+  // MMA válidas
+  const mma = MMA_POSIBLES.filter(config.numeroEjes === 1 ? m => m <= 750 : m => m >= 750);
+
   if (config.mma > 750) numeroEjes = numeroEjes.filter(e => e === 2);
 
   // Freno
-  const freno = config.mma > 750 ? [true] : [true, false];
+  const freno = config.mma > 750 || config.numeroEjes === 2 ? [true] : [true, false];
+
 
   // Luces
   const luces: ("estandar" | "led")[] = ["estandar", "led"];
@@ -99,7 +97,8 @@ const generarOpcionesValidas = (config: ConfiguracionEntradaDTO): opcionesValida
   const alto: number[] = [30, 40, 50];
 
   // Kilogramos por eje válidos según MMA y número de ejes
-  const kgPorEje = KG_POR_EJE_DISPONIBLES.filter(kg => kg >= config.mma / config.numeroEjes);
+  //const kgPorEje = KG_POR_EJE_DISPONIBLES.filter(kg => kg >= config.mma / config.numeroEjes);
+  const kgPorEje = KG_POR_EJE_DISPONIBLES.filter(kg => config.numeroEjes === 2 ? kg >= 750 : kg >= config.mma / config.numeroEjes);
 
   // Ruedas
   const pulgadasLlanta = Object.keys(TARIFA_COMPONENTES.ruedas);

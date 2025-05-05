@@ -3,8 +3,8 @@ import { ConfiguracionEntradaDTO } from '../dto/configuracionEntrada.dto';
 // 🎯 Configuración inicial por defecto
 export const CONFIGURACION_PREDETERMINADA: ConfiguracionEntradaDTO = {
   dimensiones: {
-    ancho: 140,
     largo: 250,
+    ancho: 140,
   },
   alto: 40,
   tipo: 'normal',

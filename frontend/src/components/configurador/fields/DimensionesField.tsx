@@ -15,15 +15,15 @@ interface DimensionesFieldProps {
 
 const DimensionesField: React.FC<DimensionesFieldProps> = ({ value, opciones, onChange }) => {
   const handleComboChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const [ancho, largo] = e.target.value.split('x').map(Number);
-    onChange({ ...value, ancho, largo });
+    const [largo, ancho] = e.target.value.split('x').map(Number);
+    onChange({ ...value, largo, ancho });
   };
 
   const handleAltoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChange({ ...value, alto: parseInt(e.target.value) });
   };
 
-  const selectedKey = `${value.ancho}x${value.largo}`;
+  const selectedKey = `${value.largo}x${value.ancho}`;
 
   return (
     <div className="space-y-2">
@@ -32,17 +32,17 @@ const DimensionesField: React.FC<DimensionesFieldProps> = ({ value, opciones, on
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Combo Ancho x Largo */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Ancho x Largo</label>
+          <label className="block text-sm font-medium text-gray-700">Largo x Ancho</label>
           <select
             value={selectedKey}
             onChange={handleComboChange}
             className="w-full border px-3 py-2 rounded"
           >
             {opciones.dimensiones.map(({ ancho, largo }) => {
-              const key = `${ancho}x${largo}`;
+              const key = `${largo}x${ancho}`;
               return (
                 <option key={key} value={key}>
-                  {ancho}cm x {largo}cm
+                  {largo}cm x {ancho}cm
                 </option>
               );
             })}

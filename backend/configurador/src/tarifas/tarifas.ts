@@ -10,8 +10,11 @@ export const TARIFA_COMPONENTES = {
 
   // Precio por tipo de rueda (por ejemplo, por pulgadas de llanta o modelo)
   ruedas: {
+    '10': 60,
     '13': 70,
     '14': 80,
+    '15': 90,
+    '16': 100,
   },
 
   ejes: {
