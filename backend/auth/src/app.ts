@@ -5,6 +5,7 @@ import { connectDB } from './config/database';
 import authRoutes from './routes/auth.routes';
 import { errorMiddleware } from './middlewares/error.middleware';
 import userRoutes from "@/routes/user.routes";
+import cors from 'cors'
 
 dotenv.config();
 
@@ -16,6 +17,10 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use(passport.initialize());
+
+
+// Configurar CORS para permitir el acceso desde el frontend
+app.use(cors({ origin: process.env.FRONTEND_URL }))
 
 // Rutas
 app.use('/auth', authRoutes);

@@ -2,6 +2,7 @@
 
 import { ReactNode } from 'react';
 
+
 interface ConfiguradorLayoutProps {
   children: ReactNode; // Secciones configurables
   resumen: ReactNode;  // Peso y precio (bloque blanco)

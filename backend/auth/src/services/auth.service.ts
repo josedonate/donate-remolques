@@ -1,6 +1,7 @@
 // src/services/auth.service.ts
 import { AppDataSource } from "@/config/database";
 import { User } from "@/models/User";
+import { toUserDTO } from '@/mappers/user.mapper';
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -9,7 +10,8 @@ export const getAllUsers = async () => {
 };
 
 export const getUserById = async (id: number) => {
-  return await userRepository.findOneBy({ id });
+  const dbUser = await userRepository.findOneBy({ id });
+  return dbUser ? toUserDTO(dbUser) : null;
 };
 
 export const getUserByEmail = async (email: string) => {
