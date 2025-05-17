@@ -4,13 +4,10 @@ import SectionTag from "@/components/ui/SectionTag";
 import RemolquesSlider from "@/components/remolques-components/RemolqueSlider";
 import RemolqueIntro from "@/components/remolques-components/RemolqueIntro";
 import { Caravan, Wrench, Bolt } from "lucide-react";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
+
 
 export default function HomePage() {
   return (
-    <main>
-      <Navbar />
       <div className="space-y-12 py-12">
         <div className="pt-8" />
         {/* Componente para mostrar el remolque 3D */}
@@ -42,7 +39,5 @@ export default function HomePage() {
           <RemolquesSlider />
         </section>
       </div>
-      <Footer />
-    </main>
   );
 }

@@ -1,77 +1,65 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import Link from "next/link";
-import { useAuth } from "@/hooks/useAuth";
-import { Menu, X, BookOpen, MapPin, User } from "lucide-react";
-import clsx from "clsx";
-import Image from "next/image";
+import { useState } from "react"
+import Link from "next/link"
+import { useAuth } from "@/hooks/useAuth"
+import { Menu, X, BookOpen, MapPin, MessageSquare, Users } from "lucide-react"
+import clsx from "clsx"
+import Image from "next/image"
 
 const navLinks = [
   { label: "Remolques", href: "/remolques" },
   { label: "Configurador", href: "/configurador" },
   { label: "Repuestos", href: "/repuestos" },
-];
+]
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const { user, logout } = useAuth();
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false)
+  const { user, logout } = useAuth()
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
 
   const handleLogout = async () => {
-    await logout();
-    setMenuOpen(false);
-  };
+    await logout()
+    setMenuOpen(false)
+  }
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
       <div className="mx-auto max-w px-10 py-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <Image
-            src="/donate_logo_web.png"
-            alt="Logo Donate"
-            width={200}
-            height={48}
-            priority
-          />
+          <Image src="/donate_logo_web.png" alt="Logo Donate" width={200} height={48} priority />
         </Link>
 
         {/* Enlaces escritorio */}
         <div className="hidden md:flex items-center gap-8 text-2xl font-medium text-gray-700 ml-auto">
-          <Link
-            href="/historia"
-            className="flex items-center gap-2 hover:text-black transition"
-          >
+          <Link href="/historia" className="flex items-center gap-2 hover:text-black transition">
             <BookOpen size={25} />
             Historia
           </Link>
-          <Link
-            href="/localizacion"
-            className="flex items-center gap-2 hover:text-black transition"
-          >
+          <Link href="/localizacion" className="flex items-center gap-2 hover:text-black transition">
             <MapPin size={25} />
             Localización
+          </Link>
+          <Link href="/contacto" className="flex items-center gap-2 hover:text-black transition">
+            <MessageSquare size={25} />
+            Contacto
+          </Link>
+          <Link href="/distribuidor" className="flex items-center gap-2 hover:text-black transition">
+            <Users size={25} />
+            Distribuidor
           </Link>
           {/* Icono de cuenta */}
           {/* Menú de sesión en escritorio */}
           <div className="relative hidden md:block ml-4">
-            <button
-              onClick={() => setUserMenuOpen((prev) => !prev)}
-              className="p-2"
-              aria-label="Abrir menú de usuario"
-            >
+            <button onClick={() => setUserMenuOpen((prev) => !prev)} className="p-2" aria-label="Abrir menú de usuario">
               <Menu size={28} />
             </button>
 
             {userMenuOpen && (
               <div className="absolute right-0 top-full mt-2 bg-white shadow-lg rounded-lg overflow-hidden min-w-[180px] z-50">
                 <div className="bg-gray-100 px-4 py-2">
-                  <Link
-                    href="/remolques"
-                    className="block py-1 hover:underline"
-                    onClick={() => setUserMenuOpen(false)}
-                  >
+                  <Link href="/remolques" className="block py-1 hover:underline" onClick={() => setUserMenuOpen(false)}>
                     Remolques
                   </Link>
                   <Link
@@ -94,8 +82,8 @@ export default function Navbar() {
                       </Link>
                       <button
                         onClick={() => {
-                          handleLogout();
-                          setUserMenuOpen(false);
+                          handleLogout()
+                          setUserMenuOpen(false)
                         }}
                         className="block text-left w-full py-1 text-red-600 hover:underline"
                       >
@@ -103,11 +91,7 @@ export default function Navbar() {
                       </button>
                     </>
                   ) : (
-                    <Link
-                      href="/login"
-                      className="block py-1 hover:underline"
-                      onClick={() => setUserMenuOpen(false)}
-                    >
+                    <Link href="/login" className="block py-1 hover:underline" onClick={() => setUserMenuOpen(false)}>
                       Iniciar sesión
                     </Link>
                   )}
@@ -118,11 +102,7 @@ export default function Navbar() {
         </div>
 
         {/* Menú hamburguesa móvil y también visible en escritorio */}
-        <button
-          className="md:hidden z-50"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Abrir menú"
-        >
+        <button className="md:hidden z-50" onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menú">
           {menuOpen ? <X size={40} /> : <Menu size={40} />}
         </button>
       </div>
@@ -131,9 +111,7 @@ export default function Navbar() {
       <div
         className={clsx(
           "absolute top-full left-0 w-full bg-white shadow transition-all duration-300 md:hidden",
-          menuOpen
-            ? "max-h-96 py-4 opacity-100"
-            : "max-h-0 overflow-hidden opacity-0"
+          menuOpen ? "max-h-96 py-4 opacity-100" : "max-h-0 overflow-hidden opacity-0",
         )}
       >
         <nav className="flex flex-col items-center gap-4 text-base font-medium">
@@ -152,6 +130,22 @@ export default function Navbar() {
           >
             <MapPin size={18} />
             Localización
+          </Link>
+          <Link
+            href="/contacto"
+            className="flex items-center gap-2 hover:text-black transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            <MessageSquare size={18} />
+            Contacto
+          </Link>
+          <Link
+            href="/distribuidor"
+            className="flex items-center gap-2 hover:text-black transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            <Users size={18} />
+            Distribuidor
           </Link>
           <div className="bg-gray-100 w-full py-2 text-center">
             {navLinks.map(({ label, href }) => (
@@ -175,19 +169,12 @@ export default function Navbar() {
                 >
                   Mi cuenta
                 </Link>
-                <button
-                  onClick={handleLogout}
-                  className="block w-full text-red-600 py-1 hover:text-black transition"
-                >
+                <button onClick={handleLogout} className="block w-full text-red-600 py-1 hover:text-black transition">
                   Cerrar sesión
                 </button>
               </>
             ) : (
-              <Link
-                href="/login"
-                className="block py-1 hover:text-black transition"
-                onClick={() => setMenuOpen(false)}
-              >
+              <Link href="/login" className="block py-1 hover:text-black transition" onClick={() => setMenuOpen(false)}>
                 Iniciar sesión
               </Link>
             )}
@@ -195,5 +182,5 @@ export default function Navbar() {
         </nav>
       </div>
     </nav>
-  );
+  )
 }

@@ -8,8 +8,6 @@ import RemolqueFiltersMobile from "@/components/remolques-components/RemolqueFil
 import SortDropdown from "@/components/remolques-components/SortDropdown";
 import RemolquesGrid from "@/components/remolques-components/RemolquesGrid";
 import { SlidersHorizontal } from "lucide-react";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
 
 export default function CatalogoRemolquesPage() {
   const {
@@ -49,8 +47,6 @@ export default function CatalogoRemolquesPage() {
   };
 
   return (
-    <main>
-      <Navbar />
       <div className="min-h-screen px-4 pt-8">
         {/* Sticky header (desktop) */}
         <div className="hidden lg:flex justify-between items-center sticky top-[106px] bg-white z-20 py-4 max-w-screen-xl mx-auto border-b">
@@ -126,7 +122,5 @@ export default function CatalogoRemolquesPage() {
           </div>
         </div>
       </div>
-      <Footer />
-    </main>
   );
 }

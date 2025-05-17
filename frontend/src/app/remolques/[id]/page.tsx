@@ -4,8 +4,6 @@ import Remolque3DViewer from "@/components/remolques-components/Remolque3DViewer
 import { RemolqueDTO } from "@/types/remolque";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -23,8 +21,6 @@ export default async function RemolquePage({
     if (!remolque) return notFound();
 
     return (
-      <body>
-        <Navbar />
         <div className="md:px-10 px-0 py-18 max-w-screen-xl mx-auto">
           {/* Título */}
           {/* Botón para volver al catálogo */}
@@ -57,8 +53,6 @@ export default async function RemolquePage({
             </div>
           )}
         </div>
-        <Footer />
-      </body>
     );
   } catch {
     return notFound();
